@@ -1,0 +1,568 @@
+/* You can add global styles to this file, and also import other style files */
+html, body { height: 100%; scrollbar-gutter: stable; }
+body {
+    line-height: normal;
+	background-color: var(--color-grey-6);
+	font-family: var(--text-medium-bold);
+	margin: 0px;
+}
+
+.link {
+    cursor: pointer;
+    color: var(--Color---Primary, #5956FD);
+    leading-trim: both;
+    text-edge: cap;
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 22.4px;
+    text-decoration-line: underline;
+}
+
+@media print {
+    @page {
+        size: auto;
+        margin: auto;
+        orientation: landscape;
+    }
+    
+    .print-button { display: none; }  
+    .side-nav { display: none; }   
+}
+
+/* Overrides */
+.mat-form-field-appearance-legacy .mat-form-field-underline { height: 0px !important; }
+.mat-form-field-appearance-legacy .mat-form-field-ripple { height: 0px !important; }
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle { background-color: black; }
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle { border-color: black; }
+
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background, .mat-checkbox-checked.mat-accent .mat-checkbox-background { background-color: grey; }
+.mat-select-trigger { height: 55px; }
+.mat-select-arrow { color: var(--color-primary); }
+
+:root {
+  /* fonts */
+  --text-medium-bold: Roboto;
+  --font-helvetica-neue: "Helvetica Neue";
+
+  /* font sizes */
+  --text-small-size: 14px;
+  --text-normal-bold-size: 16px;
+  --text-medium-bold-size: 18px;
+  --heading-h5-size: 24px;
+  --text-large-bold-size: 20px;
+
+  /* Colors */
+  --color-white1: #fff;
+  --color-other-2: #e6e6f6;
+  --color-grey-1: #333;
+  --neutral-col-1: #686868;
+  --color-grey-2: #4f4f4f;
+  --color-secondary: #8ad6c8;
+  --color-grey-3: #828282;
+  --color-black-2: #1d1d1d;
+  --color-grey-4: #bdbdbd;
+  --priimary-col-5: #0f1750;
+  --color-black-1: #000;
+  --color-other-1: #8325e7;
+  --color-primary: #5956fd;
+  --color-darkgray: #acadaf;
+  --color-grey-6: #f3f3f3;
+
+  /* Gaps */
+  --gap-3xs: 10px;
+  --gap-base: 16px;
+  --gap-5xs: 8px;
+  --gap-5xl: 24px;
+  --gap-13xl: 32px;
+
+  /* Paddings */
+  --padding-5xs: 8px;
+
+  /* Border radiuses */
+  --br-6xs: 7px;
+  --br-base: 16px;
+  --br-29xl: 48px;
+
+  .black-label {
+    display: flex;
+    padding: 8px;
+    width: fit-content;
+    align-items: center;
+    border-radius: 7px;
+    background: var(--Color---Grey-1, #333);
+    color: var(--Color---White, #FFF);
+  }
+
+  .blue-button {
+    border-radius: var(--br-29xl);
+    background-color: var(--color-primary);
+    width: 205.85px;
+    height: 41px;
+    overflow: hidden;
+    text-align: center;
+    color: var(--color-white1);
+  }
+    
+  .blue-button:hover {
+    filter: brightness(0.75);
+  }
+
+  .blue-font {
+    color: var(--Color---Primary, #5956FD);
+    
+    /* Text - Small Bold */
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 19.6px; /* 140% */
+  }
+
+  .bubble-left {
+    border-radius: 8px;
+    background: var(--Color---Other-2, #E6E6F6);
+    padding: 16px;
+  }
+
+  .bubble-right {
+    border-radius: 8px;
+    background: var(--Color---Grey-6, #F3F3F3);
+    padding: 16px;
+  }
+
+  .categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .category-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    border-radius: var(--br-6xs);
+    background-color: var(--color-secondary);
+    padding: var(--padding-5xs);
+    
+    color: var(--color-black-2);
+
+    /* Text - Small */
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19.6px; /* 140% */
+  }
+
+  .chat-box {
+    border-radius: 4px;
+    border: 1px solid var(--Color---Grey-4, #BDBDBD);
+    background: #FFF;
+    min-height: 100px;
+    width: calc(100% - 72px);
+    padding: 16px 36px 16px 36px;
+  }
+    
+  .circle-container {
+    border-radius: 50%; /* Make it a circle by setting border-radius to 50% */
+    overflow: hidden; /* Crop everything outside the circle */
+    border: 1px solid blue; /* Add a 2-pixel thick blue border */
+    position: relative;
+  }
+
+  .circle-image {
+    width: 100%; /* Make the image take up the entire container */
+    height: 100%; /* Make the image take up the entire container */
+    object-fit: cover; /* Maintain aspect ratio and cover the container */
+  }
+
+  .conversations {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .convo {
+    display: flex;
+    flex-direction: column;
+    width: 44.44%;
+    margin: 10px 0 10px 0;
+    overflow-wrap: break-word;
+  }
+
+  .cover-image {
+    height: 100%;
+    width: auto;    /* Maintain aspect ratio */
+  }
+
+  .creator-box {
+    width: calc(50% - 106px);
+    padding: 24px 48px 24px 48px;
+    border-radius: 10px;
+    border: 1px solid #D8DBDE;
+    background: var(--Color---Grey-6, #F3F3F3);
+  }
+
+  .creator-name {
+    color: var(--Priimary-Col-5, #0F1750);
+    
+    /* Text - Medium */
+    font-family: Roboto;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 25.2px; /* 140% */
+  }
+
+  .creators-box {
+    width: calc(100% - 48px);
+    gap: 16px;
+    border-radius: 6px;
+    background: var(--Color---White, #FFF);
+  }
+
+  .cover-container {
+    height: 150px;
+    position: relative;
+  }
+
+  .flex-column {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .flex-row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .h3-font {
+    color: #000;
+    text-align: center;
+    
+    font-family: Roboto;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 44px; /* 110% */
+  }
+
+  .h3-bold {
+    color: #000;
+    text-align: center;
+    
+    font-family: Roboto;
+    font-size: 40px;
+    font-style: bold;
+    font-weight: 700;
+    line-height: 44px; /* 110% */
+  }
+  
+  .h4-font {
+    font-family: Roboto;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 35.2px;
+  }
+  
+  .h4-bold {
+    /* Heading - H4 */
+    font-family: Roboto;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 35.2px; /* 110% */
+  }
+
+  .label-box {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    margin-bottom: 20px;
+
+    /* Text - Small */
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19.6px; /* 140% */
+  }
+
+  .large-bold {
+    /* Text - Large Bold */
+    font-family: Roboto;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 28px; /* 140% */
+  }
+  
+  .medium-bold {
+    /* Text - Large Bold */
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: bold;
+    line-height: 1.4;
+  }
+  
+  .name-label {
+    width: calc(50% - 120px);
+    margin: 15px;
+    color: var(--Color---Grey-2, #4F4F4F);
+    
+    /* Text - Medium Bold */
+    font-family: Roboto;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 25.2px; /* 140% */
+  }
+
+  .no-label {
+    display: flex;
+    padding: 8px;
+    width: fit-content;
+    align-items: center;
+  }
+
+  .normal {
+    color: var(--Color---Black-2, #1D1D1D);
+    
+    /* Text - Normal */
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22.4px; /* 140% */
+  }
+  
+  .normal-bold {
+    color: var(--Color---Black-3, #282828);
+
+    /* Text - Normal Bold */
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 22.4px; /* 140% */
+  }
+
+  .overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .page-label {
+    font-size: var(--heading-h5-size);
+    color: var(--color-grey-2);
+    font-weight: bold;
+  }
+
+  .placeholder {
+    position: absolute;
+    left: 24px; /* Set left position as needed */
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* Allow clicks to pass through to the input */
+  }
+
+  .placeholder-font {
+    color: var(--Color---Grey-4, #BDBDBD);
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 22.4px; /* 140% */
+  }
+
+  .placeholder-proposal {
+    position: absolute;
+    left: 36px; /* Set left position as needed */
+    top: 20px;
+    pointer-events: none; /* Allow clicks to pass through to the input */
+  }
+
+  .profile-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-radius: var(--br-base);
+    background-color: var(--color-white1);
+    box-shadow: 0px 5px 60px 0px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+    
+    width: 317px;
+    padding: 24px 26px 14px 26px;
+    height: fit-content;
+  }
+    
+  .profile-container {
+    width: 100px;
+    height: 100px;
+    background-color: transparent;
+    position: absolute;
+    bottom: -30px;
+    left: 27px;
+    border-radius: 50%; /* Make it a circle by setting border-radius to 50% */
+    overflow: hidden; /* Crop everything outside the circle */
+    border: 2px solid blue; /* Add a 2-pixel thick blue border */    
+  }
+
+  .project {
+    flex-direction: column;
+    border-radius: 16px;
+    box-shadow: 0px 5px 60px 0px rgba(0, 0, 0, 0.08);
+    background: var(--Color---White, #FFF);
+    padding: 24px;
+  }
+  
+  .projects {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .projects-filter-box {
+    padding: 17px 16px 16px 16px;    
+    border-radius: 12px;
+    box-shadow: 0px 5px 60px 0px rgba(0, 0, 0, 0.08);
+    background: var(--Color---White, #FFF);
+  }
+
+  .rect-image {
+      max-width: 400px;
+      max-height: 100px;
+      width: auto;
+      height: auto;
+  }
+  
+  .right-box {
+    display: flex;
+    flex-direction: column;
+
+    border-radius: var(--br-base);
+    background-color: var(--color-white1);
+    box-shadow: 0px 5px 60px 0px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+    
+    width: 307.66px;
+    padding: 24px;
+    height: fit-content;
+  }
+
+  .rounded-box {
+    position: relative;
+    border-radius: 16px;
+    box-shadow: 0px 5px 60px 0px rgba(0, 0, 0, 0.08);
+    background: var(--Color---White, #FFF);
+    display: flex;
+    font-size: 16px;
+    flex-direction: column;
+  }
+
+  .search-box {
+    height: 51px;
+    border-radius: 96px;
+    border: 1px solid var(--Color---Grey-4, #BDBDBD);
+    background: var(--Color---White, #FFF);
+  }
+
+  .search-button {
+    border-radius: 0px 96px 96px 0px;
+    background: var(--Color---Primary, #5956FD);
+    border: 0px;
+  }
+
+  .select-input {
+    height: 38.5px;
+    padding: 0px 24px 15.5px 24px;
+    border-radius: 4px;
+    border: 1px solid var(--Color---Grey-4, #BDBDBD);
+  }
+
+  .small {
+    /* Text - Small */
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19.6px; /* 140% */
+  }
+  
+  .small-bold {
+    /* Text - Small Bold */
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 19.6px; /* 140% */
+  }
+  
+  .teal-button {
+    border-radius: 198px;
+    background: var(--Color---Secondary, #8AD6C8);
+    display: flex;
+    height: 41px;
+    padding: 16px 80px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+
+  .text-input {
+    height: 55px;
+    border-radius: 4px;
+    border: 1px solid var(--Color---Grey-4, #BDBDBD);
+    padding-left: 24px;
+  }
+
+  .tile {
+    border-radius: 12px;
+    box-shadow: 0px 5px 60px 0px rgba(0, 0, 0, 0.08);
+    background: var(--Color---Grey-6, #F3F3F3);
+  }
+
+  .tiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .timestamp {
+    width: 100%;
+    color: var(--Color---Grey-3, #828282);
+    
+    /* Text - Small */
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21.6px; /* 154.286% */
+  }
+  
+  .white-button {
+    border-radius: var(--br-29xl);
+    background-color: var(--color-white1);
+    width: 205.85px;
+    height: 41px;
+    overflow: hidden;
+    text-align: center;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+  }
+    
+  .white-button:hover {
+    filter: brightness(0.75);
+  }
+}

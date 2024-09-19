@@ -1,0 +1,95 @@
+<div class="flex-column" style="gap: 15px; margin: 20px;">
+    <span style="font-size: 20px;"><b>{{ 'PROJECT_IDEA' | translate }}</b></span>  
+    <div class="project" style="padding: 24px 24px 0px 24px;">
+        <span width="100%"><b>{{ project.title }}</b></span>
+        <div class="flex-row" style="align-items: center; margin-top: 16px; margin-bottom: 24px;">   
+            <img src="assets/clock.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+            <span>{{ 'PUBLISHED' | translate }}:&nbsp;<b>{{ project.published_at }}</b></span>
+        </div>
+        <div class="categories" style="margin-bottom: 16px;">
+            <div *ngFor="let s of project.categories">
+                <div class="category-box">{{ categories[s] }}</div>
+            </div>
+        </div>
+        <span style="font-size: 20px;">{{ 'DESCRIPTION' | translate }}</span>
+        <p width="100%">{{ project.description }}</p>
+    </div>
+
+    <div class="project">
+        <span style="font-size: 20px; margin: 16px;"><b>{{ 'CREATOR' | translate }}</b></span>  
+        <div class="flex-column" style="gap: 15px; margin-left: 24px;">
+            <div class="cover-container">
+                <img *ngIf="creator.cover_image; else no_cover_image" src="data:image/jpeg;base64,{{ creator.cover_image}}" alt="Cover Image" class="cover-image">
+                <ng-template #no_cover_image>
+                <div style="display: flex; align-items: center; justify-content: center;
+                            width: 600px; height: 150px;
+                            border-radius: 4px; border: 1px dashed var(--Color---Grey-3, #828282);">
+                    <img src="assets/upload-file.svg" style="width: 40px;">
+                </div>
+                </ng-template>
+                <div class="profile-container">
+                    <img *ngIf="creator.profile_picture; else no_profile_picture" src="data:image/jpeg;base64,{{ creator.profile_picture}}" alt="Profile Picture" class="circle-image">
+                    <ng-template #no_profile_picture>
+                    <img src="assets/upload-profile.svg" style="width: 104px;">
+                    </ng-template>
+                </div>
+            </div>
+            <div class="flex-column" style="gap: 10px; margin: 40px 0 16px 25px;">
+                <div class="flex-row" style="align-items: center;">
+                    <label class="normal-bold">{{ creator.name }}</label>
+                </div>
+
+                <div style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0px; margin-top: 16px;">
+                    <div class="flex-column" style="gap: 8px">
+                        <div *ngIf="creator.city || creator.country" class="flex-row" style="align-items: center;">
+                            <img src="assets/grey-pin.svg" style="width: 19px; height: 19px;">
+                            {{ creator.city }}<span *ngIf="creator.city && creator.country">,&nbsp;</span>{{ creator.country }}
+                        </div>
+                        <div *ngIf="creator.user_type == 'C' || creator.user_type == 'S'" class="flex-row" style="align-items: center;">
+                            <!-- show 0 to 5 stars -->
+                            <img *ngIf="creator.rating >= 1" src="assets/star-full.svg" width="20px;">
+                            <img *ngIf="creator.rating > 0 && creator.rating < 1" src="assets/star-half.svg" width="20px;">
+                            <img *ngIf="creator.rating <= 0" src="assets/star-empty.svg" width="20px;">
+                            <img *ngIf="creator.rating >= 2" src="assets/star-full.svg" width="20px;">
+                            <img *ngIf="creator.rating > 1 && creator.rating < 2" src="assets/star-half.svg" width="20px;">
+                            <img *ngIf="creator.rating <= 1" src="assets/star-empty.svg" width="20px;">
+                            <img *ngIf="creator.rating >= 3" src="assets/star-full.svg" width="20px;">
+                            <img *ngIf="creator.rating > 2 && creator.rating < 3" src="assets/star-half.svg" width="20px;">
+                            <img *ngIf="creator.rating <= 2" src="assets/star-empty.svg" width="20px;">
+                            <img *ngIf="creator.rating >= 4" src="assets/star-full.svg" width="20px;">
+                            <img *ngIf="creator.rating > 3 && creator.rating < 4" src="assets/star-half.svg" width="20px;">
+                            <img *ngIf="creator.rating <= 3" src="assets/star-empty.svg" width="20px;">
+                            <img *ngIf="creator.rating >= 5" src="assets/star-full.svg" width="20px;">
+                            <img *ngIf="creator.rating > 4 && creator.rating < 5" src="assets/star-half.svg" width="20px;">
+                            <img *ngIf="creator.rating <= 4" src="assets/star-empty.svg" width="20px;">
+                            <label class="normal-bold" style="margin-left: 7px;">{{ creator.rating | number:'1.1-1' }}</label>
+                            <span class="small" style="margin-left: 8px; color: var(--Color---Grey-2, #4F4F4F);">({{ creator.reviews }})</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; order: 2;">
+                        <button *ngIf="chatCreator != null" mat-button (click)="close(); goChat();" class="white-button" style="align-self: flex-end;">{{ 'CONTACT' | translate }}</button>
+                    </div>
+                </div>
+                
+                <div class="categories" style="justify-content: center; margin-bottom: 16px;">
+                    <div *ngFor="let s of creator.categories">
+                        <div class="category-box">{{ categories[s] }}</div>
+                    </div>
+                </div>
+                <div class="flex-row" style="align-items: center;">
+                    <a href="{{ creator.url }}" target="_blank" rel="noopener noreferrer">{{ creator.url }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+                    
+    <div class="flex-row" style="justify-content: center; gap: 20px; margin-top: 15px;">
+        <button mat-button (click)="close()" class="white-button">{{ 'CLOSE' | translate }}</button>
+    </div>
+</div>
+
+<ng-template #loading>
+<div class="flex-column" style="align-items: center;">
+    <img src="assets/loading.svg" style="height: 100px; width: 100px;">
+</div>
+</ng-template>

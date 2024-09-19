@@ -1,0 +1,15 @@
+.creators-filter-box {
+    padding: 21px 15px 21px 15px;
+    border-radius: 8px;
+    box-shadow: 0px 5px 60px 0px rgba(0, 0, 0, 0.08);
+    background: var(--Color---White, #FFF);
+}
+
+.find-creators-title {
+    color: var(--Color---Black-3, #282828);
+    font-family: Roboto;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 35.2px; /* 110% */
+}

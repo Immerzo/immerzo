@@ -1,0 +1,100 @@
+p.description {
+    color: var(--Color---Grey-2, #4F4F4F);
+    
+    /* Text - Normal */
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22.4px; /* 140% */
+}
+
+.brand-profile {
+    display: flex;
+    flex-direction: column;
+
+    border-radius: var(--br-base);
+    background-color: var(--color-white1);
+    box-shadow: 0px 5px 60px 0px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+
+    width: calc(33.33% - 16px);
+    height: 280px;
+    padding: 24px 24px 16px 24px;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.brand-profile-title {
+    height: 19px;
+    color: #1D1D1D;
+    font-size: 20px;
+    font-family: Roboto;
+    font-weight: 700;
+    line-height: 28px;
+    word-wrap: break-word;
+}
+
+.idea {
+    border-radius: 48px;
+    background-color: #092C4C;
+    height: 195px;
+    padding: 15px;
+    box-sizing: border-box;
+}
+  
+.medium-bold-font {
+    color: var(--Color---Grey-2, #4F4F4F);
+    
+    /* Text - Medium Bold */
+    font-family: Roboto;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 25.2px; /* 140% */
+}
+
+.objectives {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.progress {
+    width: 100%;
+    height: 12px;
+    border-radius: 16px;
+    background: var(--Color---Grey-5, #E0E0E0);
+}
+
+.small-bold-font {
+    color: var(--Color---Grey-2, #4F4F4F);
+    text-align: center;
+    
+    /* Text - Small Bold */
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 19.6px; /* 140% */
+    word-wrap: break-word;
+}
+
+.small-font {
+    color: var(--Color---Grey-2, #4F4F4F);
+    
+    /* Text - Small */
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21.6px; /* 154.286% */
+    word-wrap: break-word;
+}
+
+::ng-deep .select-panel {
+    margin-left: -51px;
+    width: calc(100% - 40px);
+}

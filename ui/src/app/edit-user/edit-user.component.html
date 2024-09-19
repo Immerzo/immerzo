@@ -1,0 +1,165 @@
+<div style="margin: 20px 40px; max-height: calc(100vh - 200px);">
+    <div class="flex-column" style="gap: 15px;">
+        <div style="font-size: 20px;"><b>{{ 'PERSONAL_DETAILS' | translate }}</b></div>
+        <div class="flex-row"
+            (drop)="onDrop($event, 'profile_picture', 'profile_picture_area')"
+            (dragover)="onDragOver($event, 'profile_picture_area')"
+            (dragleave)="onDragLeave($event, 'profile_picture_area')">
+            <div #profile_picture_area>
+                <div class="circle-container" style="width: 100px; height: 100px;">
+                    <img *ngIf="user.profile_picture; else no_profile_picture" src="data:image/jpeg;base64,{{ user.profile_picture}}" alt="Profile Picture" class="circle-image">
+                </div>
+                <ng-template #no_profile_picture>
+                <img src="assets/upload-profile.svg" style="width: 104px;">
+                </ng-template>
+            </div>
+            <div class="flex-column drag-drop-guide">
+                <span style="font-weight: bold; font-size: 18px;">{{ 'UPLOAD_PROFILE_PICTURE' | translate }}</span>
+                <span>{{ '_DRAG_AND_DROP_PIX' | translate }}</span>
+                <div>{{ 'OR' | translate }}&nbsp;
+                    <a href="#" (click)="browse($event, 'profile_picture')">{{ 'BROWSE' | translate }}</a>
+                    <input type="file" style="display: none" accept="image/*" (change)="onFileSelected($event, 'profile_picture')" #profile_picture>
+                </div>
+            </div>
+        </div>       
+        <div class="flex-row"
+            (drop)="onDrop($event, 'cover_image', 'cover_image_area')"
+            (dragover)="onDragOver($event, 'cover_image_area')"
+            (dragleave)="onDragLeave($event, 'cover_image_area')">
+            <div style="display: flex; align-items: center; justify-content: center;
+                min-width: 402px; min-height: 102px;
+                border-radius: 4px; border: 1px dashed var(--Color---Grey-3, #828282);" #cover_image_area>
+                <img *ngIf="user.cover_image; else no_cover_image" src="data:image/jpeg;base64,{{ user.cover_image}}" alt="Cover Image" class="rect-image">
+                <ng-template #no_cover_image>
+                <div style="display: flex; align-items: center; justify-content: center;
+                            width: 400px; height: 100px;
+                            border-radius: 4px; border: 1px dashed var(--Color---Grey-3, #828282);">
+                    <img src="assets/upload-file.svg" style="width: 40px;">
+                </div>
+                </ng-template>
+            </div>
+            <div class="flex-column drag-drop-guide">
+                <span style="font-weight: bold; font-size: 18px;">{{ 'UPLOAD_COVER_IMAGE' | translate }}</span>
+                <span>{{ '_DRAG_AND_DROP_IMAGE' | translate }}</span>
+                <div>{{ 'OR' | translate }}&nbsp;
+                    <a href="#" (click)="browse($event, 'cover_image')">{{ 'BROWSE' | translate }}</a>
+                    <input type="file" style="display: none" accept="image/*" (change)="onFileSelected($event, 'cover_image')" #cover_image>
+                </div>
+            </div>
+        </div>            
+
+        <div class="flex-row" style="width: 670px; min-height: 100px; gap: 20px; align-items: center;">
+            <label class="normal-bold">{{ 'DESCRIPTION' | translate }}:</label>
+            <mat-form-field style="width: 100%;">
+                <textarea matInput type="text" [(ngModel)]='user.description' name="description"
+                    style="border-radius: 4px; border: 1px solid var(--Color---Grey-4, #BDBDBD); background: #FFF; min-height: 100px; padding: 24px; box-sizing: border-box;">
+                </textarea>
+            </mat-form-field>
+        </div>
+        
+        <div class="flex-row" style="width: 670px; height: 60px; gap: 20px; align-items: center;">
+            <label class="normal-bold">{{ 'NAME' | translate }}:</label>
+            <mat-form-field style="width: 100%;">
+                <input matInput type="text" [(ngModel)]='user.name' name="name" class="text-input" style="box-sizing: border-box;">
+            </mat-form-field>
+        </div>
+
+        <div class="flex-row" style="width: 670px; height: 60px; gap: 20px; align-items: center;">
+            <label class="normal-bold">{{ 'URL' | translate }}:</label>
+            <mat-form-field style="width: 100%;">
+                <input matInput type="text" [(ngModel)]='user.url' name="url" class="text-input" style="box-sizing: border-box;">
+            </mat-form-field>
+        </div>
+
+        <div *ngIf="user.user_type == 'C' || user.user_type == 'S'"
+            class="flex-row" style="width: 670px; height: 60px; align-items: center; gap: 40px;">
+            <mat-form-field style="width: calc(50% - 20px);">
+                <div class="flex-row" style="gap: 20px; align-items: center;">
+                    <label class="normal-bold">{{ 'CATEGORIES' | translate }}:</label>
+                    <mat-form-field style="width: 100%;">
+                        <mat-select [(ngModel)]="user.categories" name="categories" disableOptionCentering multiple class="text-input" style="box-sizing: border-box;">
+                            <ng-container *ngIf="categories$ | async as categories">
+                            <mat-option *ngFor="let c of categories" [value]="c.key">{{ c.value }}</mat-option>
+                            </ng-container>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </mat-form-field>
+            <mat-form-field style="width: calc(50% - 20px);">
+                <div class="flex-row" style="gap: 20px; align-items: center;">
+                    <label class="normal-bold">{{ 'GAMING_PLATFORMS' | translate }}:</label>
+                    <mat-form-field style="width: 100%;">
+                        <mat-select [(ngModel)]="user.platforms" name="platforms" disableOptionCentering multiple class="text-input" style="box-sizing: border-box;">
+                            <ng-container *ngIf="platforms$ | async as platforms">
+                            <mat-option *ngFor="let p of platforms" [value]="p.key">{{ p.value }}</mat-option>
+                            </ng-container>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </mat-form-field>
+        </div>
+    
+        <div *ngIf="user.user_type == 'C' || user.user_type == 'S'" style="width: 670px; margin-bottom: 20px;">
+            <label class="normal-bold">{{ 'SOCIAL_PLATFORMS' | translate }}:</label>
+            <mat-form-field *ngFor="let sp of SOCIAL_PLATFORMS" style="width: calc(100% - 40px); height: 70px; margin-left: 40px;">
+                <div class="flex-row" style="gap: 20px; align-items: center;">
+                    <label class="normal-bold" style="width: 250px;">
+                    {{ sp | translate }}
+                    <span *ngIf="(sp == 'DISCORD') || (sp == 'LINKEDIN')">&nbsp;{{ 'PROFILE_URL' | translate }}</span>
+                    <span *ngIf="sp == 'ROBLOX'">&nbsp;{{ 'USER_ID' | translate }}</span>
+                    <span *ngIf="(sp != 'DISCORD') && (sp != 'LINKEDIN') && (sp != 'ROBLOX')">&nbsp;{{ 'HANDLE' | translate }}</span>
+                    :</label>
+                    <input matInput type="text" [(ngModel)]='handles[sp]' name="handle" class="text-input">
+                </div>
+            </mat-form-field>
+        </div>
+                            
+        <div *ngIf="user.user_type == 'B'"
+            class="flex-row" style="width: 670px; height: 60px; gap: 20px; align-items: center;">
+            <label class="normal-bold">{{ 'INDUSTRY_TYPE' | translate }}:</label>
+            <mat-form-field style="width: 100%;">
+                <mat-select [(ngModel)]="user.industry" name="industry" disableOptionCentering class="text-input" style="box-sizing: border-box;">
+                    <mat-option *ngFor="let ind of INDUSTRIES" [value]="ind">{{ ind | translate }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        
+        <div *ngIf="user.user_type == 'C' || user.user_type == 'S'"
+            class="flex-row" style="width: 670px; height: 60px; align-items: center; gap: 40px;">
+            <mat-form-field style="width: calc(50% - 20px);">
+                <div class="flex-row" style="gap: 20px; align-items: center;">
+                    <label class="normal-bold">{{ 'BID' | translate }}:&nbsp;&nbsp;&pound;</label>
+                    <input matInput type="number" [(ngModel)]='user.bid_min' name="bid_min" class="text-input">
+                </div>
+            </mat-form-field>
+            <mat-form-field style="width: calc(50% - 20px);">
+                <div class="flex-row" style="gap: 20px; align-items: center;">
+                    <label class="normal-bold">&nbsp;{{ 'TO' | translate }}&nbsp;&nbsp;&pound;</label>
+                    <input matInput type="number" [(ngModel)]='user.bid_max' name="bid_max" class="text-input">
+                </div>
+            </mat-form-field>
+        </div>
+        
+        <div class="flex-row" style="width: 670px; height: 60px; align-items: center; gap: 40px;">
+            <mat-form-field style="width: calc(50% - 20px);">
+                <div class="flex-row" style="gap: 20px; align-items: center;">
+                    <label class="normal-bold">{{ 'CITY' | translate }}:</label>
+                    <input matInput type="text" [(ngModel)]='user.city' name="city" class="text-input">
+                </div>
+            </mat-form-field>
+
+            <mat-form-field style="width: calc(50% - 20px);">
+                <div class="flex-row" style="gap: 20px; align-items: center;">
+                    <label class="normal-bold">{{ 'COUNTRY' | translate }}:</label>
+                    <mat-select [(ngModel)]="user.country" name="country" disableOptionCentering class="text-input" style="box-sizing: border-box;">
+                        <mat-option *ngFor="let c of countryOptions" [value]="c.value">{{ c.value | translate }}</mat-option>
+                    </mat-select>
+                </div>
+            </mat-form-field>
+        </div>
+        <div class="flex-row" style="justify-content: center; gap: 20px; margin: 25px 0;">
+            <button mat-button (click)="save();" class="blue-button">{{ 'SAVE' | translate }}</button>
+            <button mat-button (click)="close()" class="white-button">{{ 'CANCEL' | translate }}</button>
+        </div>
+    </div>
+</div>

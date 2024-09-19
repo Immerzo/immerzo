@@ -1,0 +1,80 @@
+<div style="margin-top: 26px;">
+    <div class="print-content">
+        <div class="flex-row" style="align-items: center; position: relative;">
+            <mat-select [(ngModel)]="game_id" disableOptionCentering (selectionChange)="update_game_id()" class="select-input" style="width: 324px; background-color: white; font-weight: bold;">
+                <mat-option value="" disabled="true">{{ 'CHOOSE_PROJECT' | translate }}</mat-option>
+                <ng-container *ngIf="projects$ | async as projects">
+                    <ng-container *ngFor="let p of projects">
+                        <mat-option *ngIf="p.game_id" [value]="p.game_id"><b>{{ p.title }}</b></mat-option>
+                    </ng-container>
+                </ng-container>
+            </mat-select>
+            
+            <div class="print-button" style="position: absolute; right: 0px;">
+                <button mat-button class="white-button" (click)="print()" style="align-items: center; width: 241px; height: 48px;">
+                    <span style="margin: 5px;">{{ "DOWNLOAD_REPORT" | translate }}</span>
+                    <img src="assets/download.svg" height="24px">
+                </button>
+            </div>
+        </div>
+        <div class="top-box" style="margin-top: 20px;">
+        	<div class="chart-controls" style="margin: 0 10px; 45px 10px;">        
+                <div class="flex-row" style="align-items: center; order: 1; width: 100%;">
+            		<span>{{ "VIEW_BY" | translate }}:&nbsp;&nbsp;</span>
+            	    <mat-select [(ngModel)]="action" disableOptionCentering class="select-input" style="width: 175px; font-weight: bold;">
+                        <mat-option value="click"><b>{{ "NUMBER_OF_CLICKS" | translate }}</b></mat-option>
+                        <mat-option value="visit"><b>{{ "NUMBER_OF_VISITS" | translate }}</b></mat-option>
+                    </mat-select>
+            
+            		<span style="margin-left: 16px;">{{ "GAME_OBJECTS" | translate }}:&nbsp;&nbsp;</span>
+            	    <mat-select [(ngModel)]="object_id[action]" disableOptionCentering (selectionChange)="update_oid(action)" class="select-input" style="width: calc(50% - 150px); font-weight: bold;">
+            	        <mat-option value=""><b>{{ 'ALL' | translate }}</b></mat-option>
+            	        <mat-option *ngFor="let oid of data[action]['oids']" [value]="oid"><b>{{ oid }}</b></mat-option>
+            	    </mat-select>
+                </div>
+
+                <div style="display: flex; order: 2; gap: 8px;">                        	    
+        	       <div (click)="update_period('hour');" [ngClass]="period == 'hour'? 'period-selected' : 'period'">{{ 'HOUR' | translate }}</div>
+                    <div (click)="update_period('day');" [ngClass]="period == 'day'? 'period-selected' : 'period'">{{ 'DAY' | translate }}</div>
+                    <div (click)="update_period('week');" [ngClass]="period == 'week'? 'period-selected' : 'period'">{{ 'WEEK' | translate }}</div>
+                    <div (click)="update_period('month');" [ngClass]="period == 'month'? 'period-selected' : 'period'">{{ 'MONTH' | translate }}</div>                                        	    
+                </div>
+        	</div>
+        	<div class="chart" #myChart>
+        	    <ngx-charts-line-chart
+        	      [view]="view"
+        	      [scheme]="colorScheme"
+        	      [results]="data[action]['results']"
+        	      [gradient]="gradient"
+        	      [xAxis]="showXAxis"
+        	      [yAxis]="showYAxis"
+        	      [legend]="showLegend"
+        	      [showXAxisLabel]="showXAxisLabel"
+        	      [showYAxisLabel]="showYAxisLabel"
+        	      xAxisLabel="Date"
+        	      [yAxisLabel]="data[action]['label']"
+        	      [timeline]=false
+        	      (select)="onSelect($event)">
+        	    </ngx-charts-line-chart>
+        	</div>
+        </div>
+        <div class="bottom-boxes" style="margin-top: 20px;">
+            <div class="bottom-box">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 0px;">
+            	   <span class="large-bold">{{ "NUMBER_OF_CLICKS" | translate }}:</span>
+            	   <img src="assets/info.svg" style="width: 24px; height: 24px; align-self: flex-end; cursor: pointer;"> 
+            	</div>
+            	<span class="h3-font center" style="margin-top: 45px;">{{ numClicks }}</span>
+                <!-- Content for the first box -->
+            </div>
+            <div class="bottom-box">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 0px;">
+            	   <span class="large-bold">{{ "NUMBER_OF_VISITS" | translate }}:</span>
+                   <img src="assets/info.svg" style="width: 24px; height: 24px; align-self: flex-end; cursor: pointer;"> 
+                </div>
+            	<span class="h3-font center" style="margin-top: 45px;">{{ numVisits }}</span>
+                <!-- Content for the second box -->
+            </div>
+        </div>
+    </div>
+</div>

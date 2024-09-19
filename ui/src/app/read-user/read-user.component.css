@@ -1,0 +1,110 @@
+::ng-deep .mat-dialog-container {
+    padding: 0px !important;
+}
+
+.bid {
+  flex-grow: 0;
+  font-family: Roboto;
+  font-size: 20px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.1;
+  letter-spacing: normal;
+  text-align: left;
+  color: #828282;
+}
+
+.follower-font {
+  flex-grow: 0;
+  font-family: Roboto;
+  font-size: 10px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 2.16;
+  letter-spacing: normal;
+  text-align: center;
+  color: #828282;
+}
+
+.game-box {
+  width: 116px;
+  height: 118px;
+  flex-grow: 0;
+  border-radius: 8px;
+  border: solid 1px #d8eeff;
+  background-color: #fff;
+}
+
+.handle-font {
+  font-family: Roboto;
+  font-size: 8px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 2.7;
+  letter-spacing: normal;
+  text-align: center;
+  color: #4f4f4f;
+}
+
+.profile-cover-image {
+    width: 100%;
+    height: auto;
+}
+
+.profile-description {
+  margin: 25px 0;
+  flex-grow: 0;
+  object-fit: contain;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.54;
+  letter-spacing: normal;
+  text-align: left;
+  color: #4f4f4f;
+}
+
+.profile-picture {
+    width: 126px;
+    height: 126px;
+    background-color: transparent;
+    position: absolute;
+    bottom: -30px;
+    left: 30px;
+    border-radius: 50%; /* Make it a circle by setting border-radius to 50% */
+    overflow: hidden; /* Crop everything outside the circle */
+    border: 2px solid blue; /* Add a 2-pixel thick blue border */    
+}
+
+.profile-picture-container {
+    position: relative;
+}
+
+.tab-green {
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 50px;
+    background-color: rgba(48, 203, 2, 0.1);
+}
+
+.tab-magenta {
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 50px;
+    background-color: rgba(234, 62, 247, 0.1);
+}

@@ -1,0 +1,79 @@
+::ng-deep .ngx-charts .line-highlight {
+    display: block !important;
+}
+
+.blue-button {
+    border-radius: var(--br-29xl);
+    background-color: var(--color-primary);
+    width: 205.85px;
+    height: 41px;
+    overflow: hidden;
+    text-align: center;
+    color: var(--color-white1);
+}
+    
+.blue-button:hover {
+    filter: brightness(0.75);
+}
+
+.bottom-box {
+    width: calc(50% - 50px); /* Divide the space into two boxes with margin in between */
+    height: 175px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    
+    border-radius: var(--br-base);
+    background-color: var(--color-white1);
+    box-shadow: 0px 5px 60px 0px rgba(0, 0, 0, 0.08);
+}
+
+.bottom-boxes {
+    display: flex;
+    justify-content: space-between; /* Spread the boxes evenly */
+}
+
+.chart {
+    flex: 1;
+    background-color: #FFF;
+    height: calc(100% - 120px);
+}
+
+.chart-controls {
+    height: 75px;
+    background-color: var(--color-white1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+}
+
+.period {
+    border-radius: 7px;
+    color: var(--Color---Grey-1, #333);
+    background: var(--Color---Grey-6, #F3F3F3);
+    display: flex;
+    padding: 8px;
+    align-items: center;
+    cursor: pointer;
+    align-self: flex-end; 
+}
+
+.period-selected {
+    border-radius: 7px;
+    color: var(--Color---Grey-6, #F3F3F3);
+    background: var(--Color---Grey-1, #333);
+    display: flex;
+    padding: 8px;
+    align-items: center;
+    cursor: pointer;
+    align-self: flex-end; 
+}
+
+.top-box {
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0px 5px 60px 0px rgba(0, 0, 0, 0.08);
+    background: #FFF;
+    overflow: hidden; /* Ensure the border radius is applied to the container */
+    height: 632px;
+}

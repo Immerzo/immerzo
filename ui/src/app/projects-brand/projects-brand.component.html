@@ -1,0 +1,354 @@
+<div style="margin-top: 26px;">
+    <div *ngIf="proj == null; else selectedProj">
+        <div *ngIf="idea == null; else setupProjects">
+            <div class="label-box">
+                <span class="black-label" style="cursor: pointer;">{{ 'MY_PROJECTS' | translate }}</span>
+                <span class="no-label" (click)="initIdea();" style="cursor: pointer;">{{ 'SET_UP_PROJECT' | translate }}</span>
+            </div>
+            <div class="flex-row" style="margin-top: 22px; gap: 24px;">
+                <div class="flex-column" style="flex: 1;">
+                    <mat-form-field style="position: relative; width: 100%;">
+                        <label class="placeholder placeholder-font" [ngStyle]="{'display': title !== ''? 'none' : ''}">
+                            {{ '_SEARCH_PROJECTS' | translate }}
+                        </label>
+                        <input matInput type="text" [(ngModel)]="title" class="search-box" style="width: calc(100% - 24px); padding-left: 24px;">
+                        <button mat-button
+                            (click)="updateProjects()"
+                            class="search-button" style="position: absolute; top: 6px; right: -2px; width: 65px; height: 53px;">
+                            <img src="assets/right-arrow-inv.svg" style="width: 24px; height: 24px; margin-right: 3px;"> 
+                        </button>
+                    </mat-form-field>
+                    <div *ngIf="projects$ | async as projects; else loading" class="projects">
+                        <div *ngFor="let p of projects" class="project" style="cursor: pointer; padding: 24px;" (click)="proj = p; projState = p.state; updateCreators(p); updateProjectFiles(p);">
+                            <span width="100%"><b>{{ p.title }}</b></span>
+                            <div class="flex-row" style="align-items: center; margin-top: 16px; margin-bottom: 24px;">
+                                <img src="assets/owner.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PROJECT_OWNER' | translate }}:&nbsp;</span>
+                                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                                    {{ p.brand_name }}
+                                </span> 
+
+                                <img src="assets/clock.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PUBLISHED' | translate }}:&nbsp;</span>
+                                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                                    {{ formatDate(p.published_at) }}
+                                </span> 
+
+                                <img src="assets/dollar.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'BUDGET' | translate }}:&nbsp;</span>
+                                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333);">
+                                    {{ currency(p.budget) }}
+                                </span>
+                            </div>
+                            <p style="width: 100%; color: var(--Color---Grey-2, #4f4f4f);">{{ p.description }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="projects-filter-box flex-column" style="width: 283px; height: 99px;">
+                    <span class="small-bold" style="color: var(--Color---Grey-1, #333); opacity: 0.8;">{{ 'FILTER_BY' | translate }}:</span>
+                    <mat-form-field style="height: 55px; width: 233px;">
+                        <mat-select [(ngModel)]="state" (selectionChange)="updateProjects();" disableOptionCentering class="select-input">
+                            <mat-option value="">{{ 'ALL_PROJECTS' | translate }}</mat-option>
+                            <mat-option value="P">{{ 'PENDING_PROJECTS' | translate }}</mat-option>
+                            <mat-option value="A">{{ 'ACTIVE_PROJECTS' | translate }}</mat-option>
+                            <mat-option value="S">{{ 'SUSPENDED_PROJECTS' | translate }}</mat-option>
+                            <mat-option value="T">{{ 'COMPLETED_PROJECTS' | translate }}</mat-option>
+                            <mat-option value="C">{{ 'CANCELLED_PROJECTS' | translate }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <ng-template #setupProjects>
+            <div>
+                <div class="label-box">
+                    <span class="no-label" (click)="idea = null;">{{ 'MY_PROJECTS' | translate }}</span>
+                    <span class="black-label">{{ 'SET_UP_PROJECT' | translate }}</span>
+                </div>
+
+                <div class="flex-column" style="margin: 40px 8px; width: 100%;">
+                    <div class="flex-row" style="width: 100%; height: 60px; gap: 20px; align-items: center; margin-bottom: 20px;">
+                        <label class="normal-bold" style="width: 150px;">{{ 'PROJECT_TITLE' | translate }}:</label>
+                        <mat-form-field style="width: 100%;">
+                            <label class="placeholder placeholder-font" [ngStyle]="{'display': idea['title'] !== ''? 'none' : ''}">
+                                {{ '_TYPE_PROJECT_TITLE' | translate }}
+                            </label>
+                            <input matInput type="text" [(ngModel)]="idea['title']" name="title" class="text-input" style="box-sizing: border-box;">
+                        </mat-form-field>
+                    </div>
+                    <div style="margin-left: 150px;">
+                        <span>{{ '_PROJECT_TITLE_1' | translate }}</span>
+                        <ul>
+                            <li>{{ '_PROJECT_TITLE_2' | translate }}</li>
+                            <li>{{ '_PROJECT_TITLE_3' | translate }}</li>
+                            <li>{{ '_PROJECT_TITLE_4' | translate }}</li>
+                        </ul>
+                    </div>
+                                                                                                    
+                    <div class="flex-row" style="width: 100%; min-height: 120px; gap: 20px; align-items: center;">
+                        <label class="normal-bold" style="width: 150px;">{{ 'DESCRIPTION' | translate }}:</label>
+                        <mat-form-field style="width: 100%;">
+                            <label class="placeholder placeholder-font" [ngStyle]="{'display': idea['description'] !== ''? 'none' : ''}"
+                                style="position: absolute; left: 24px; top: 40px; pointer-events: none;">
+                                {{ '_PROJECT_DESCRIPTION_1' | translate }}
+                            </label>
+                            <textarea matInput type="text" [(ngModel)]="idea['description']" name="description"
+                                style="height: 120px; border-radius: 4px; border: 1px solid var(--Color---Grey-4, #BDBDBD); background: #FFF; min-height: 100px; padding: 24px; box-sizing: border-box;">
+                            </textarea>
+                        </mat-form-field>
+                    </div>
+                            
+                    <div style="width: 100%;">
+                        <div class="flex-row" style="gap: 20px; align-items: center;">
+                            <label class="normal-bold" style="width: 150px;">{{ 'CATEGORIES' | translate }}:</label>
+                            <mat-form-field style="height: 100px; width: 100%;">
+                                <mat-select [(ngModel)]="idea['categories']" name="categories" disableOptionCentering multiple class="select-input" style="height: 55px; box-sizing: border-box;">
+                                    <ng-container *ngIf="categories$ | async as categories">
+                                    <mat-option *ngFor="let c of categories" [value]="c.key">{{ c.value }}</mat-option>
+                                    </ng-container>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="flex-row" style="width: 100%; height: 100px; align-items: center; gap: 40px;">
+                        <div class="flex-row" style="width: calc(50% - 20px); align-items: center;">
+                            <label class="normal-bold" style="width: 202px;">{{ 'PLATFORMS' | translate }}:</label>
+                            <mat-form-field style="height: 100px; width: 100%;">
+                                <mat-select [(ngModel)]="idea['platforms']" name="platforms" disableOptionCentering multiple class="select-input" style="height: 55px; box-sizing: border-box;">
+                                    <ng-container *ngIf="platforms$ | async as platforms">
+                                    <mat-option *ngFor="let p of platforms" [value]="p.key">{{ p.value }}</mat-option>
+                                    </ng-container>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex-row" style="width: calc(50% - 20px); align-items: center;">
+                            <label class="normal-bold" style="width: 150px;">{{ 'BUDGET' | translate }}:&nbsp;&nbsp;&pound;</label>
+                            <mat-form-field style="width: 100%;">
+                                <label class="placeholder placeholder-font" [ngStyle]="{'display': idea['budget'] !== ''? 'none' : ''}">
+                                    {{ '_PROJECT_BUDGET' | translate }}
+                                </label>
+                                <input matInput type="text" [(ngModel)]="idea['budget']" name="title" class="text-input" style="box-sizing: border-box;">
+                            </mat-form-field>
+                        
+                        </div>
+                    </div>
+        
+                    <div style="display: flex; justify-content: center; margin-top: 40px;">
+                        <button (click)="createProject();" class="teal-button normal-bold" style="width: 300px;">{{ 'CREATE_PROJECT' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+    <ng-template #selectedProj>
+        <div class="flex-column" style="flex: 1;">
+            <div (click)="proj = null; projState = null; creators$ = null; creator$ = null; projectFiles$ = null;" style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 36px;">
+                <img src="assets/back.svg" style="width: 24px; height: 24px;">
+                <div>{{ 'BACK' | translate }}</div>
+            </div>
+ 
+            <div class="flex-row" style="gap: 24px;">
+                <div class="projects" style="flex: 1;">
+                    <div class="project" style="padding: 24px;">
+                        <span width="100%"><b>{{ proj.title }}</b></span>
+                        <div style="display: flex; justify-content: space-between; margin-top: 16px; margin-bottom: 24px;">
+                            <div style="order: 1; align-items: center;">
+                                <img src="assets/clock.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PUBLISHED' | translate }}:&nbsp;</span>
+                                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                                    {{ formatDate(proj.published_at) }}
+                                </span>
+                                
+                                <img src="assets/owner.svg" style="width: 24px; height: 24px; margin-right: 8px;">
+                                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PROJECT_OWNER' | translate }}:&nbsp;</span>
+                                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333);">
+                                    {{ proj.brand_name }}
+                                </span>
+                            </div>
+                            <div *ngIf="proj.state == 'P'" style="display: flex; order: 2;">
+                                <img (click)="copyLink(proj.id);" src="assets/link.svg" style="width: 24px; height: 24px; align-self: flex-end; cursor: pointer;"> 
+                            </div>
+                        </div>
+                        <div class="categories">
+                            <div *ngFor="let s of proj.categories">
+                                <div class="category-box">{{ categories[s] }}</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: center; align-items: center;">                 
+                            <div style="width: 100%; margin: 22px 0 30px 0;">
+                                <mat-divider></mat-divider>
+                            </div>
+                        </div>
+
+                        <span style="font-size: 20px;">{{ 'DESCRIPTION' | translate }}</span>
+                        <p style="width: 100%; color: var(--Color---Grey-2, #4f4f4f);">{{ proj.description }}</p>
+
+                        <div *ngIf="proj.state == 'P'; else nonPending">
+                            <span style="font-size: 20px;">{{ 'BIDDING_CREATORS' | translate }}:</span>
+
+                            <div *ngIf="creators$ | async as creators" class="creators-box tiles" style="margin-top: 16px;">
+                                <div *ngFor="let c of creators" class="creator-box flex-column" style="align-items: center;">                                    
+                                    <div class="circle-container" style="width: 100px; height: 100px;">
+                                        <img *ngIf="c?.profile_picture; else no_pix" src="data:image/jpeg;base64,{{ c?.profile_picture}}" alt="Profile Picture" class="circle-image">
+                                    </div>
+                                    <ng-template #no_pix>
+                                    <img src="assets/upload-profile.svg" style="width: 104px;">
+                                    </ng-template>
+                                                        
+                                    <label class="normal-bold" style="margin-top: 16px;">{{ c.name }}</label>
+                                    <div *ngIf="c.city || c.country" class="flex-row" style="align-items: center; margin: 5px;">
+                                        <img src="assets/grey-pin.svg" style="width: 19px; height: 19px;">
+                                        {{ c.city }}<span *ngIf="c.city && c.country">,&nbsp;</span>{{ c.country }}
+                                    </div>
+                                    <div class="flex-row" style="align-items: center; margin: 5px;">
+                                        <!-- show 0 to 5 stars -->
+                                        <img *ngIf="c.rating >= 1" src="assets/star-full.svg" width="20px;">
+                                        <img *ngIf="c.rating > 0 && c.rating < 1" src="assets/star-half.svg" width="20px;">
+                                        <img *ngIf="c.rating <= 0" src="assets/star-empty.svg" width="20px;">
+                                        <img *ngIf="c.rating >= 2" src="assets/star-full.svg" width="20px;">
+                                        <img *ngIf="c.rating > 1 && c.rating < 2" src="assets/star-half.svg" width="20px;">
+                                        <img *ngIf="c.rating <= 1" src="assets/star-empty.svg" width="20px;">
+                                        <img *ngIf="c.rating >= 3" src="assets/star-full.svg" width="20px;">
+                                        <img *ngIf="c.rating > 2 && c.rating < 3" src="assets/star-half.svg" width="20px;">
+                                        <img *ngIf="c.rating <= 2" src="assets/star-empty.svg" width="20px;">
+                                        <img *ngIf="c.rating >= 4" src="assets/star-full.svg" width="20px;">
+                                        <img *ngIf="c.rating > 3 && c.rating < 4" src="assets/star-half.svg" width="20px;">
+                                        <img *ngIf="c.rating <= 3" src="assets/star-empty.svg" width="20px;">
+                                        <img *ngIf="c.rating >= 5" src="assets/star-full.svg" width="20px;">
+                                        <img *ngIf="c.rating > 4 && c.rating < 5" src="assets/star-half.svg" width="20px;">
+                                        <img *ngIf="c.rating <= 4" src="assets/star-empty.svg" width="20px;">
+                                        <label class="normal-bold" style="margin-left: 7px;">{{ c.rating | number:'1.1-1' }}</label>
+                                        <span class="small" style="margin-left: 8px; color: var(--Color---Grey-2, #4F4F4F);">({{ c.reviews }})</span>
+                                    </div>
+                                    <button mat-button (click)="openReadUserDialog(c.id, proj);"
+                                        class="white-button" style="width: 110px; height: 35px; margin-top: 10px;">
+                                        {{ "VIEW_PROFILE" | translate }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ng-template #nonPending>
+                    <div *ngIf="proj.state != 'C'" class="project">
+                        <span style="font-size: 20px;"><b>{{ 'CREATOR' | translate }}</b></span>  
+                        <div *ngIf="creator$ | async as creator; else loading" class="flex-column" style="gap: 15px;">
+                            <div class="cover-container">
+                                <img *ngIf="creator.user.cover_image; else no_cover_image" src="data:image/jpeg;base64,{{ creator.user.cover_image}}" alt="Cover Image" class="cover-image">
+                                <ng-template #no_cover_image>
+                                <div style="display: flex; align-items: center; justify-content: center;
+                                            width: 600px; height: 150px;
+                                            border-radius: 4px; border: 1px dashed var(--Color---Grey-3, #828282);">
+                                    <img src="assets/upload-file.svg" style="width: 40px;">
+                                </div>
+                                </ng-template>
+                                <div class="profile-container">
+                                    <img *ngIf="creator.user.profile_picture; else no_profile_picture" src="data:image/jpeg;base64,{{ creator.user.profile_picture}}" alt="Profile Picture" class="circle-image">
+                                    <ng-template #no_profile_picture>
+                                    <img src="assets/upload-profile.svg" style="width: 104px;">
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div class="flex-column" style="gap: 10px; margin: 40px 0 16px 25px;">
+                                <div class="flex-row" style="align-items: center;">
+                                    <label class="normal-bold">{{ creator.user.name }}</label>
+                                </div>
+                                <div *ngIf="creator.user.city || creator.user.country" class="flex-row" style="align-items: center;">
+                                    <img src="assets/grey-pin.svg" style="width: 19px; height: 19px;">
+                                    {{ creator.user.city }}<span *ngIf="creator.user.city && creator.user.country">,&nbsp;</span>{{ creator.user.country }}
+                                </div>
+                                <div *ngIf="creator.user.user_type == 'C' || creator.user.user_type == 'S'" class="flex-row" style="align-items: center;">
+                                    <!-- show 0 to 5 stars -->
+                                    <img *ngIf="creator.user.rating >= 1" src="assets/star-full.svg" width="20px;">
+                                    <img *ngIf="creator.user.rating > 0 && creator.user.rating < 1" src="assets/star-half.svg" width="20px;">
+                                    <img *ngIf="creator.user.rating <= 0" src="assets/star-empty.svg" width="20px;">
+                                    <img *ngIf="creator.user.rating >= 2" src="assets/star-full.svg" width="20px;">
+                                    <img *ngIf="creator.user.rating > 1 && creator.user.rating < 2" src="assets/star-half.svg" width="20px;">
+                                    <img *ngIf="creator.user.rating <= 1" src="assets/star-empty.svg" width="20px;">
+                                    <img *ngIf="creator.user.rating >= 3" src="assets/star-full.svg" width="20px;">
+                                    <img *ngIf="creator.user.rating > 2 && creator.user.rating < 3" src="assets/star-half.svg" width="20px;">
+                                    <img *ngIf="creator.user.rating <= 2" src="assets/star-empty.svg" width="20px;">
+                                    <img *ngIf="creator.user.rating >= 4" src="assets/star-full.svg" width="20px;">
+                                    <img *ngIf="creator.user.rating > 3 && creator.user.rating < 4" src="assets/star-half.svg" width="20px;">
+                                    <img *ngIf="creator.user.rating <= 3" src="assets/star-empty.svg" width="20px;">
+                                    <img *ngIf="creator.user.rating >= 5" src="assets/star-full.svg" width="20px;">
+                                    <img *ngIf="creator.user.rating > 4 && creator.user.rating < 5" src="assets/star-half.svg" width="20px;">
+                                    <img *ngIf="creator.user.rating <= 4" src="assets/star-empty.svg" width="20px;">
+                                    <label class="normal-bold" style="margin-left: 7px;">{{ creator.user.rating | number:'1.1-1' }}</label>
+                                    <span class="small" style="margin-left: 8px; color: var(--Color---Grey-2, #4F4F4F);">({{ creator.user.reviews }})</span>
+                                </div>
+                                <div class="categories" style="justify-content: center;">
+                                    <div *ngFor="let s of creator.user.categories">
+                                        <div class="category-box">{{ categories[s] }}</div>
+                                    </div>
+                                </div>
+                                <div class="flex-row" style="align-items: center;">
+                                    <a href="{{ creator.user.url }}" target="_blank" rel="noopener noreferrer">{{ creator.user.url }}</a>
+                                </div>
+                            </div>
+                            <span style="font-size: 20px;">{{ 'BID' | translate }}</span>
+                            <span style="width: 100%; color: var(--Color---Grey-2, #4f4f4f);">{{ currency(creator.rsvp.bid) }}</span>
+                            <span style="font-size: 20px;">{{ 'PROPOSAL' | translate }}</span>
+                            <p style="width: 100%; color: var(--Color---Grey-2, #4f4f4f);">{{ creator.rsvp.proposal }}</p>
+                        </div>
+                    </div>
+                    </ng-template>
+                </div>
+                <div class="profile-box" style="align-items: center;">
+                    <span class="h3-font">{{ currency(proj.budget) }}</span>
+                    <span style="color: var(--Color---Grey-3, #828282); margin: 16px;">{{ 'BUDGET' | translate }}</span>
+
+                    <div style="display: flex; justify-content: center; align-items: center;">                 
+                        <div style="width: 265px;">
+                            <mat-divider></mat-divider>
+                        </div>
+                    </div>
+    
+                    <div class="flex-column" style="width: 100%; margin-bottom: 40px;">
+                        <button *ngIf="proj.state != 'C'" mat-button (click)="goChat(proj);" class="teal-button" style="width: 266px; height: 41px; margin-top: 24px;">{{ 'CONVERSATIONS' | translate }}</button>
+
+                        <div style="margin: 30px 0 10px; 0">{{ 'ASSET' | translate }}:</div>
+                        <div *ngIf="projectFiles$ | async as projectFiles"
+                            class="flex-column" style="gap: 10px; margin-bottom: 32px;">
+                            <span>{{ projectFiles.length }}&nbsp;{{ 'FILES' | translate }}</span>
+                            <div *ngFor="let f of projectFiles"
+                                class="flex-row" style="align-items: center; cursor: pointer;"
+                                (click)="downloadFile(f.file_id, f.name)">
+                                <span>&#x2022;</span>
+                                <img src="assets/upload-file.svg" style="width: 40px;">
+                                <div class="flex-column">
+                                    <span class="link">{{ f.name }}</span>
+                                    <span>{{ 'SIZE' | translate }}:&nbsp;{{ f.size }}&nbsp;{{ 'BYTES' | translate }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>{{ 'PROJECT_STATUS' | translate }}:</div>
+                        <p style="margin-bottom: 32px;">
+                            <mat-select [(ngModel)]="this.proj.state" (selectionChange)="updateState();" disableOptionCentering class="select-input" style="width:215px;">
+                                <mat-option *ngIf="projState == 'P'" value="P">{{ 'PENDING' | translate }}</mat-option>
+                                <mat-option *ngIf="projState == 'S' || projState == 'A'" value="A">{{ 'ACTIVE' | translate }}</mat-option>
+                                <mat-option *ngIf="projState == 'A' || projState == 'S'" value="S">{{ 'SUSPENDED' | translate }}</mat-option>
+                                <mat-option *ngIf="projState == 'A' || projState == 'T'" value="T">{{ 'COMPLETED' | translate }}</mat-option>
+                                <mat-option *ngIf="projState == 'P' || projState == 'A' || projState == 'S' || projState == 'C'" value="C">{{ 'CANCELLED' | translate }}</mat-option>
+                            </mat-select>                          
+                        </p>
+                        <div style="margin-bottom: 16px;">{{ 'PLATFORMS' | translate }}:</div>
+                        <div class="flex-column" style="gap: 10px;">
+                            <div *ngFor="let plat of proj.platforms" style="max-width: 200px; solid #D8DBDE;">
+                                <img src="assets/{{ plat }}.png" style="display: block; max-height: 50px; margin-left: auto; margin-right: auto;"> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</div>
+
+<ng-template #loading>
+    <div class="projects" style="align-items: center; justify-content: center; width: 640.66px;">
+        <img src="assets/loading.svg" style="width: 100px; height: 100px;">
+    </div>
+</ng-template>

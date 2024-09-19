@@ -1,0 +1,12 @@
+DROP TABLE "k_shares";
+DROP TABLE "k_invitations";
+DROP TABLE "k_categories";
+DROP TABLE "k_platforms";
+DROP TABLE "k_logs";
+DROP TABLE "k_chats";
+DROP TABLE "k_files";
+DROP TABLE "k_transactions";
+DROP TABLE "k_invoices";
+DROP TABLE "k_rsvps";
+DROP TABLE "k_projects";
+DROP TABLE "k_users";

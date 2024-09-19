@@ -1,0 +1,18 @@
+.creator-name {
+    font-size: var(--text-medium-bold-size);
+    line-height: 25.2px;
+    font-weight: bold;
+}
+
+.proposal-box {
+    border-radius: 4px;
+    border: 1px solid var(--Color---Grey-4, #BDBDBD);
+    min-height: 429px;
+    width: calc(100% - 72px);
+    padding: 16px 36px 16px 36px;
+}
+
+::ng-deep .select-panel {
+    margin-left: -51px;
+    width: calc(100% - 40px);
+}

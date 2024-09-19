@@ -1,0 +1,10 @@
+export const SOCIAL_PLATFORMS = [ 'DISCORD',
+                                  'INSTAGRAM',
+                                  'LINKEDIN',
+                                  'ROBLOX',
+                                  'SNAPCHAT',
+                                  'SPATIAL',
+                                  'TIKTOK',
+                                  'TWITCH',
+                                  'X',
+                                  'YOUTUBE' ];

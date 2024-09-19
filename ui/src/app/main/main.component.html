@@ -1,0 +1,285 @@
+<div *ngIf="getUser() != null;then app_page else login_page"></div>
+
+<ng-template #app_page>
+	<div style="display: flex;">
+		<div class="side-nav">
+			<mat-list>
+				<div style="display: flex; justify-content: center; align-items: center; height: 81px;">
+					<img src="assets/logo.svg" style="height: 31.4px;">
+					<img src="assets/immerzo.png" style="width: 106px; height: 31.4px; margin-left: 10px;">
+				</div>
+				<div style="display: flex; justify-content: center; align-items: center; margin-bottom: 92.5px;">					
+					<div style="width: 168px;">
+						<mat-divider></mat-divider>
+					</div>
+				</div>	
+				<mat-action-row style="margin-bottom: 75.5px;">
+					<button *ngIf="getUser().user_type == 'B'" mat-button [ngClass]="(selected == 'DASH_BRAND')? 'menu-entry-selected': 'menu-entry'" (click)="onClick('DASH_BRAND')">
+						<img *ngIf="selected == 'DASH_BRAND'" src="assets/dashboard-selected.svg"  class="menu-img">
+						<img *ngIf="selected != 'DASH_BRAND'" src="assets/dashboard.svg"  class="menu-img">
+						<b style="margin-left: 16px">{{ 'DASHBOARD' | translate }}</b>
+					</button>
+                    <button *ngIf="getUser().user_type == 'C' || getUser().user_type == 'S'" mat-button [ngClass]="(selected == 'DASH_CREATOR')? 'menu-entry-selected': 'menu-entry'" (click)="onClick('DASH_CREATOR')">
+                        <img *ngIf="selected == 'DASH_CREATOR'" src="assets/dashboard-selected.svg"  class="menu-img">
+                        <img *ngIf="selected != 'DASH_CREATOR'" src="assets/dashboard.svg"  class="menu-img">
+                        <b style="margin-left: 16px">{{ 'DASHBOARD' | translate }}</b>
+                    </button>
+				</mat-action-row>
+
+				<mat-action-row>
+					<button *ngIf="getUser().user_type == 'B'" mat-button
+					    [ngClass]="(selected == 'PROJECTS_BRAND')? 'menu-entry-selected': 'menu-entry'"
+					    style="margin-bottom: 28.5px;"
+					    (click)="onClick('PROJECTS_BRAND')">
+						<img *ngIf="selected == 'PROJECTS_BRAND'" src="assets/projects-selected.svg"  class="menu-img">
+						<img *ngIf="selected != 'PROJECTS_BRAND'" src="assets/projects.svg"  class="menu-img">
+						<b style="margin-left: 16px">{{ 'PROJECTS' | translate }}</b>
+					</button>
+                    <button *ngIf="getUser().user_type == 'C' || getUser().user_type == 'S'" mat-button
+                        [ngClass]="(selected == 'PROJECTS_CREATOR')? 'menu-entry-selected': 'menu-entry'"
+                        style="margin-bottom: 75.5px;"
+                        (click)="onClick('PROJECTS_CREATOR')">
+                        <img *ngIf="selected == 'PROJECTS_CREATOR'" src="assets/projects-selected.svg"  class="menu-img">
+                        <img *ngIf="selected != 'PROJECTS_CREATOR'" src="assets/projects.svg"  class="menu-img">
+                        <b style="margin-left: 16px">{{ 'PROJECTS' | translate }}</b>
+                    </button>
+				</mat-action-row>
+
+				<mat-action-row *ngIf="getUser().user_type == 'B'" style="margin-bottom: 75.5px;">
+					<button mat-button [ngClass]="(selected == 'ANALYTICS')? 'menu-entry-selected': 'menu-entry'" (click)="onClick('ANALYTICS')">
+						<img *ngIf="selected == 'ANALYTICS'" src="assets/analytics-selected.svg"  class="menu-img">
+						<img *ngIf="selected != 'ANALYTICS'" src="assets/analytics.svg"  class="menu-img">
+						<b style="margin-left: 16px">{{ 'ANALYTICS' | translate }}</b>
+					</button>
+				</mat-action-row>
+
+				<mat-action-row *ngIf="getUser().user_type == 'B'" style="margin-bottom: 32px;">
+					<button mat-button [ngClass]="(selected == 'CREATORS')? 'menu-entry-selected': 'menu-entry'" (click)="onClick('CREATORS')">
+						<img *ngIf="selected == 'CREATORS'" src="assets/creators-selected.svg"  class="menu-img">
+						<img *ngIf="selected != 'CREATORS'" src="assets/creators.svg"  class="menu-img">
+						<b style="margin-left: 16px">{{ 'CREATORS' | translate }}</b>
+					</button>
+				</mat-action-row>
+
+                <mat-action-row style="margin-bottom: 80px;">
+                    <button *ngIf="getUser().user_type == 'B'" mat-button [ngClass]="(selected == 'CHATS_BRAND')? 'menu-entry-selected': 'menu-entry'" (click)="onClick('CHATS_BRAND')">
+                        <img *ngIf="selected == 'CHATS_BRAND'" src="assets/conversations-selected.svg"  class="menu-img">
+                        <img *ngIf="selected != 'CHATS_BRAND'" src="assets/conversations.svg"  class="menu-img">
+                        <b style="margin-left: 16px">{{ 'CONVERSATIONS' | translate }}</b>
+                    </button>
+                    <button *ngIf="getUser().user_type == 'C' || getUser().user_type == 'S'" mat-button [ngClass]="(selected == 'CHATS_CREATOR')? 'menu-entry-selected': 'menu-entry'" (click)="onClick('CHATS_CREATOR')">
+                        <img *ngIf="selected == 'CHATS_CREATOR'" src="assets/conversations-selected.svg"  class="menu-img">
+                        <img *ngIf="selected != 'CHATS_CREATOR'" src="assets/conversations.svg"  class="menu-img">
+                        <b style="margin-left: 16px">{{ 'CONVERSATIONS' | translate }}</b>
+                    </button>
+                </mat-action-row>
+
+				<mat-action-row *ngIf="getUser().user_type == 'B'">
+					<button mat-button [ngClass]="(selected == 'BILLING_BRAND')? 'menu-entry-selected': 'menu-entry'" (click)="onClick('BILLING_BRAND')">
+						<img *ngIf="selected == 'BILLING_BRAND'" src="assets/billing-selected.svg"  class="menu-img">
+						<img *ngIf="selected != 'BILLING_BRAND'" src="assets/billing.svg"  class="menu-img">
+						<b style="margin-left: 16px">{{ 'BILLING' | translate }}</b>
+					</button>
+				</mat-action-row>
+
+                <mat-action-row *ngIf="getUser().user_type == 'C' || getUser().user_type == 'S'">
+                    <button mat-button [ngClass]="(selected == 'BILLING_CREATOR')? 'menu-entry-selected': 'menu-entry'" (click)="onClick('BILLING_CREATOR')">
+                        <img *ngIf="selected == 'BILLING_CREATOR'" src="assets/billing-selected.svg"  class="menu-img">
+                        <img *ngIf="selected != 'BILLING_CREATOR'" src="assets/billing.svg"  class="menu-img">
+                        <b style="margin-left: 16px">{{ 'BILLING' | translate }}</b>
+                    </button>
+                </mat-action-row>
+			</mat-list>
+
+            <!--
+            <button mat-button style="position: absolute; left: 92px; bottom: 42px; padding: 0;">
+                <div style="position: relative; height: 55px; width: 55px;">
+                    <img src="assets/bubble.png" style="width: 100%; height: 100%;">
+                    <img src="assets/operator.png" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; z-index: 1;">
+                </div>
+            </button>
+             -->
+		</div>
+        <div class="main-content">
+            <div style="margin: 24px 24px 34px 24px; max-width: 1250px; width: 100%; min-width: 1000px;">
+                <mat-toolbar style="display: flex; align-items: center; justify-content: space-between; padding: 0px;">
+                    <div style="order: 1;">
+                        <ng-container *ngIf="this.selected == 'DASH_BRAND' || this.selected == 'DASH_CREATOR'">
+                        <span class="page-label" style="margin-right: 11px;">{{ 'WELCOME' | translate }},</span>
+                        <span class="page-label" style="color: var(--color-grey-3); font-weight: normal;">{{ getUser().name }}</span>
+                        </ng-container>
+                        <ng-container *ngIf="this.selected == 'PROJECTS_BRAND' || this.selected == 'PROJECTS_CREATOR'">
+                        <span class="page-label">{{ 'PROJECTS' | translate }}</span>
+                        </ng-container>
+                        <ng-container *ngIf="this.selected == 'ANALYTICS'">
+                        <span class="page-label">{{ 'ANALYTICS' | translate }}</span>
+                        </ng-container>
+                        <ng-container *ngIf="this.selected == 'CREATORS'">
+                        <span class="page-label">{{ 'CREATORS' | translate }}</span>
+                        </ng-container>
+                        <ng-container *ngIf="this.selected == 'CHATS_BRAND' || this.selected == 'CHATS_CREATOR'">
+                        <span class="page-label">{{ 'CONVERSATIONS' | translate }}</span>
+                        </ng-container>
+                        <ng-container *ngIf="this.selected == 'BILLING'">
+                        <span class="page-label">{{ 'BILLING' | translate }}</span>
+                        </ng-container>
+                    </div>
+                    <div class="flex-row" style="order: 2; align-items: center;">
+                        <div *ngIf="getUser().user_type == 'B'" class="flex-row"
+                            style="gap: 24px; margin-right: 40px; padding: 13px 19px; border-radius: 7px; border: solid 0.3px #828282;">
+                            <div class="medium-bold">{{ 'GAMING' | translate }}</div>
+                            <mat-slide-toggle [(ngModel)]="isSocial"></mat-slide-toggle>
+                            <div class="medium-bold">{{ 'SOCIAL_MEDIA' | translate }}</div>
+                        </div>
+
+                        <div class="flex-row">
+                            <img src="assets/bell.svg" style="width: 24px; margin-right: 24px; align-self: flex-end; cursor: pointer;"> 
+                            <img src="assets/moon.svg" style="width: 24px; margin-right: 24px; align-self: flex-end; cursor: pointer;"> 
+
+                            <div mat-menu-trigger [matMenuTriggerFor]="menu" class="circle-container" style="width: 24px; height: 24px; align-self: flex-end; cursor: pointer;">
+                                <img *ngIf="getUser().profile_picture; else no_pix_icon" src="data:image/jpeg;base64,{{getUser().profile_picture}}" class="circle-image">
+                            </div>
+                        </div>
+                        
+                        <mat-menu #menu="matMenu" xPosition="before" yPosition="below">
+                            <button mat-menu-item>
+                                <div class="flex-row" style="align-items: center">
+                                    <img src="assets/help.svg" style="width: 24px; height: 24px; margin-right: 24px;">
+                                    <span class="dropdown-font">{{ 'HELP' | translate }}</span>
+                                </div>
+                               </button>
+                            <button mat-menu-item>
+                                <div class="flex-row" style="align-items: center">
+                                    <img src="assets/faq.svg" style="width: 24px; height: 24px; margin-right: 24px;">
+                                    <span class="dropdown-font">{{ 'FAQS' | translate }}</span>
+                                </div>
+                            </button>
+                            <button mat-menu-item (click)="logout();">
+                                <div class="flex-row" style="align-items: center">
+                                    <img src="assets/logout.svg" style="width: 24px; height: 24px; margin-right: 24px;">
+                                    <span class="dropdown-font">{{ 'LOGOUT' | translate }}</span>
+                                </div>
+                            </button>
+                        </mat-menu>
+                        
+                        <ng-template #no_pix_icon>
+                        <img src="assets/upload-profile.svg" class="circle-image">
+                        </ng-template>            
+                    </div>
+                </mat-toolbar>
+
+                <app-dash-brand *ngIf="this.selected == 'DASH_BRAND'" [isSocial]="isSocial" (setupProject)="goSetupProject($event);" (chatCreator)="goChatCreator($event);"></app-dash-brand>
+                <app-dash-creator *ngIf="this.selected == 'DASH_CREATOR'"></app-dash-creator>
+                <app-projects-brand *ngIf="this.selected == 'PROJECTS_BRAND'" [idea]="idea" (chat)="goChat($event, 'CHATS_BRAND');"></app-projects-brand>
+                <app-projects-creator *ngIf="this.selected == 'PROJECTS_CREATOR'" (chat)="goChat($event, 'CHATS_CREATOR');"></app-projects-creator>
+                <app-analytics *ngIf="this.selected == 'ANALYTICS'"></app-analytics>
+                <app-creators *ngIf="this.selected == 'CREATORS'" [isSocial]="isSocial" (chatCreator)="goChatCreator($event);"></app-creators>
+                <app-chats-brand *ngIf="this.selected == 'CHATS_BRAND'" [isSocial]="isSocial" [proj]="proj" [chatCreator]="chatCreator"></app-chats-brand>
+                <app-chats-creator *ngIf="this.selected == 'CHATS_CREATOR'" [proj]="proj"></app-chats-creator>
+                <app-billing-brand *ngIf="this.selected == 'BILLING_BRAND'"></app-billing-brand>
+                <app-billing-creator *ngIf="this.selected == 'BILLING_CREATOR'"></app-billing-creator>
+                <app-settings *ngIf="this.selected == 'SETTINGS'"></app-settings>
+            </div>
+        </div>
+	</div>
+</ng-template>
+
+<ng-template #login_page>
+	<mat-toolbar class="top-bar" style="margin-bottom: 99px;">
+        <div class="flex-row" style="align-items: center; width: 940px; margin-left: auto; margin-right: auto;">
+            <img src="assets/logo-inv.png" style="height: 38.33px;">
+            <span style="flex: 1"></span>
+            <a class="navbarlink w-nav-link" style="color: var(--Color---White, #FFF);"
+                href="https://www.immerzo.io/#how-it-works" target="_blank">{{ 'HOME' | translate }}</a>
+            <a class="navbarlink w-nav-link" style="color: var(--Color---White, #FFF);"
+                href="https://www.immerzo.io/case-study" target="_blank">{{ 'CASE_STUDY' | translate }}</a>
+            <a class="navbarlink w-nav-link" style="color: var(--Color---White, #FFF);"
+                href="https://www.immerzo.io/case-study#email-form-3" target="_blank">{{ 'CONTACT_US' | translate }}</a>
+
+            <button *ngIf="share_id" (click)="navToLogin()"
+                mat-button class="teal-button" style="width: 50px; height: 35px; margin-left: 20px;">
+                {{ "LOGIN" | translate }}
+            </button>
+        </div>
+	</mat-toolbar>
+    <div *ngIf="share_id" class="flex-column" style="align-items: center; gap: 20px;">
+        <ng-container *ngIf="shared_proj">
+        <div class="large-bold" style="color: var(--Color---Grey-3); text-align: center;">
+            {{ '_ARE_YOU_INTERESTED' | translate }}
+        </div>
+        <div class="project" style="width: 800px; padding: 24px;">
+            <span width="100%"><b>{{ shared_proj.title }}</b></span>
+            <div style="display: flex; align-items: center; margin-top: 16px; margin-bottom: 24px;">
+                <img src="assets/clock.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PUBLISHED' | translate }}:&nbsp;</span>
+                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                    {{ formatDate(shared_proj.published_at) }}
+                </span>
+                
+                <img src="assets/owner.svg" style="width: 24px; height: 24px; margin-right: 8px;">
+                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PROJECT_OWNER' | translate }}:&nbsp;</span>
+                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333);">
+                    {{ shared_proj.brand_name }}
+                </span>
+            </div>
+            <div class="categories">
+                <div *ngFor="let s of shared_proj.categories">
+                    <div class="category-box">{{ categories[s] }}</div>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;">                 
+                <div style="width: 100%; margin: 22px 0 30px 0;">
+                    <mat-divider></mat-divider>
+                </div>
+            </div>
+
+            <span style="font-size: 20px;">{{ 'DESCRIPTION' | translate }}</span>
+            <p style="width: 100%; color: var(--Color---Grey-2, #4f4f4f);">{{ shared_proj.description }}</p>
+        </div>
+        </ng-container>
+        <ng-container *ngIf="shared_proj == null">
+            <span style="font-size: 20px;">{{ '_SHARE_ID_NOT_FOUND' | translate }}</span>        
+        </ng-container>
+    </div>
+
+	<div *ngIf="share_id == null" style="display: flex; justify-content: center;">
+		<div class="login-box">
+			<div class="h4-font" style="margin-top: 34px; color: var(--Color---Grey-3); text-align: center;">
+			    {{ '_LOG_IN_TO_IMMERZO' | translate }}
+			</div>
+            <div class="normal" style="margin-top: 24px;">{{ '_ENTER_DETAILS' | translate }}</div>
+
+			<label class="normal-bold" style="width: 445px; margin-top: 20px;">{{ 'EMAIL' | translate }}</label>
+			<mat-form-field style="width: 445px;">
+                <label class="placeholder placeholder-font" [ngStyle]="{'display': username !== ''? 'none' : ''}">
+                    {{ '_ENTER_YOUR_EMAIL_ADDRESS' | translate }}
+                </label>
+				<input matInput type="text" [(ngModel)]="username" class="text-input" style="width: 421px;">
+			</mat-form-field>
+			
+			<label class="normal-bold" style="width: 445px; margin-top: 10px;">{{ 'PASSWORD' | translate }}</label>
+			<mat-form-field style="width: 445px;">
+                <label class="placeholder placeholder-font" [ngStyle]="{'display': password !== ''? 'none' : ''}">
+                    {{ '_ENTER_YOUR_PASSWORD' | translate }}
+                </label>
+				<input matInput type="password" [(ngModel)]="password" class="text-input" style="width: 421px;">
+			</mat-form-field>
+			
+			<mat-error *ngIf="error" style="font-size: 16px; width: 445px; justify-content: left;">{{ "_INCORRECT_USERNAME_OR_PASSWORD" | translate }}</mat-error>
+
+			<div class="normal" style="margin-top: 10px; width: 445px;">{{ '_FORGOT_PASSWORD' | translate }}&nbsp;
+			    <a href='https://discord.gg/JnscQBXF' class="link" target="_blank">{{ '_CONTACT_US_HERE' | translate }}</a>
+			</div>
+			<button mat-button (click)="login()"
+			    class="teal-button normal-bold" style="width: 445px; margin-top: 50px;">{{ "LOGIN" | translate }}
+			</button>
+			<div class="normal" style="margin: 33px 0 44px 0;">{{ '_DONT_HAVE_AN_ACCOUNT' | translate }}&nbsp;
+			    <a href='https://signup.immerzo.io' target='_blank' class="link">{{ '_SIGN_UP' | translate }}</a>
+			</div>
+		</div>
+	</div>
+	<footer class="footer">
+		<p class="copyright">{{ "COPYRIGHT" | translate }}&nbsp;&#9400;2024&nbsp;{{ "ALL_RIGHTS_RESERVED" | translate }}</p>
+	</footer>
+</ng-template>
+

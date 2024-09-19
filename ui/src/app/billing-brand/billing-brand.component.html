@@ -1,0 +1,139 @@
+<div class="flex-column">
+    <div class="large-bold" style="margin-top: 32px; margin-bottom: 40px;">{{ "OVERVIEW" | translate }}</div>
+
+    <ng-container *ngIf="invoice != null">
+    <div class="label-box">
+        <span class="black-label" (click)="invoice = ''" style="cursor: pointer;">{{ 'INVOICES' | translate }}</span>
+        <!--
+            <span class="no-label" style="cursor: pointer;">{{ 'SUBSCRIPTIONS' | translate }}</span>
+         -->
+        <span class="no-label" (click)="invoice = null;" style="cursor: pointer;">{{ 'PAYMENT_HISTORY' | translate }}</span>
+    </div>
+            
+    <div class="flex-row" style="gap: 24px;">
+        <div *ngIf="unpaidInvoices$ | async as unpaidInvoices; else loading" class="flex-column" style="flex: 1;">
+            <div class="summary-box" style="padding: 25px 0px 23px 0px;">
+                <div style="display: flex; justify-content: center; gap: 72px;">
+                    <div class="flex-column" style="align-items: center; width: 223px; gap: 16px;">
+                        <img src="assets/unpaid.svg" width="32">
+                        <span class="h3-bold">{{ currency(unpaid) }}</span>
+                        <span class="small-bold" style="color: var(--Color---Grey-3, #828282);">{{ 'UNPAID_INVOICES' | translate }}</span>
+                    </div>   
+                    <div class="flex-column" style="align-items: center; width: 223px; gap: 16px;">
+                        <img src="assets/paid.svg" width="32">
+                        <span class="h3-bold">{{ currency(paid) }}</span>
+                        <span class="small-bold" style="color: var(--Color---Grey-3, #828282);">{{ 'PAID_INVOICES' | translate }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-row" style="align-items: center; margin: 40px 0 24px 0;">
+                <div class="flex-row center select-input" style="width: 402px;">
+                    <mat-select [(ngModel)]="invoice" [panelClass]="'select-panel'">
+                        <mat-option value="">{{ "_SELECTED_INVOICE" | translate }}:&nbsp;<b>{{ "ALL" | translate }}</b></mat-option>
+                        <ng-container *ngFor="let i of unpaidInvoices">
+                        <mat-option [value]="i">{{ currency(i.amount) }}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </div>
+                <div style="flex: 1;"></div>
+                <button mat-button (click)="pay()" class="teal-button small-bold" style="width: 163px;" [disabled]="invoice === ''">{{ 'PAY_INVOICE' | translate }}</button>
+            </div>
+            
+            <ng-container *ngIf="invoice === ''">
+            <div class="flex-column" style="gap: 8px;">
+                <div *ngFor="let i of unpaidInvoices" class="project">
+                    <span width="100%"><b>{{ i.title }}</b></span>
+                    <div class="flex-row" style="align-items: center; margin-top: 12px;">
+                        <img src="assets/amount.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                        <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'AMOUNT' | translate }}:&nbsp;</span>
+                        <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                            {{ currency(i.amount) }}
+                        </span> 
+
+                        <img src="assets/clock.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                        <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'DUE_DATE' | translate }}:&nbsp;</span>
+                        <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                            {{ formatDate(i.due_at) }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            </ng-container>
+
+            <ng-container *ngIf="invoice !== ''">
+                <div class="project">
+                    <span width="100%"><b>{{ invoice.title }}</b></span>
+                    <div class="flex-row" style="align-items: center; margin-top: 12px;">
+                        <img src="assets/amount.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                        <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'AMOUNT' | translate }}:&nbsp;</span>
+                        <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                            {{ currency(invoice.amount) }}
+                        </span> 
+
+                        <img src="assets/clock.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                        <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'DUE_DATE' | translate }}:&nbsp;</span>
+                        <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                            {{ formatDate(invoice.due_at) }}
+                        </span>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+
+        <div class="summary-box" style="width: 317px; padding: 24px;">
+            <div class="flex-column">
+                <span class="medium-bold" style="margin-bottom: 24px;">{{ "ALL_TIME_EXPENDITURE" | translate }}</span>
+                <div class="flex-row">
+                    <span class="summary-caption" style="margin-bottom: 8px;">{{ "_AMOUNT_THIS_MONTH" | translate }}</span>
+                    <div style="flex: 1"></div>
+                    <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333);">
+                        &#163;{{ (paidCurrent + unpaidCurrent) | numberFormatter }}
+                    </span>
+                </div>
+                
+                <div class="flex-row">
+                    <span class="summary-caption" style="margin-bottom: 8px;">{{ "_AMOUNT_TO_DATE" | translate }}</span>
+                    <div style="flex: 1"></div>
+                    <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333);">
+                        &#163;{{ (paid + unpaid) | numberFormatter }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    </ng-container>
+
+    <ng-container *ngIf="invoice == null">
+    <div class="label-box">
+        <span class="no-label" (click)="invoice = ''" style="cursor: pointer;">{{ 'INVOICES' | translate }}</span>
+        <!--
+            <span class="no-label" (click)="invoice = null;" style="cursor: pointer;">{{ 'SUBSCRIPTIONS' | translate }}</span>
+         -->
+        <span class="black-label" (click)="invoice = null;" style="cursor: pointer;">{{ 'PAYMENT_HISTORY' | translate }}</span>
+    </div>
+    <div *ngIf="transactions$ | async as transactions; else loading" class="flex-column" style="gap: 8px;">
+        <div *ngFor="let t of transactions" class="project">
+            <span width="100%"><b>{{ t.title }}</b></span>
+            <div class="flex-row" style="align-items: center; margin-top: 12px;">
+                <img src="assets/amount.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'AMOUNT' | translate }}:&nbsp;</span>
+                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                    {{ currency(t.amount) }}
+                </span> 
+
+                <img src="assets/clock.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PAYMENT_DATE' | translate }}:&nbsp;</span>
+                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                    {{ formatDate(t.created_at) }}
+                </span>
+            </div>
+        </div>
+    </div>
+    </ng-container>
+</div>
+
+<ng-template #loading>
+    <div class="projects" style="align-items: center; justify-content: center; width: 100%;">
+        <img src="assets/loading.svg" style="width: 100px; height: 100px;">
+    </div>
+</ng-template>

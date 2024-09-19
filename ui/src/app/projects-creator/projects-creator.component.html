@@ -1,0 +1,197 @@
+<div style="margin-top: 26px;">
+    <div *ngIf="proj == null; else myRsvp">
+        <div *ngIf="myProjects; else myInvitations">
+            <div class="label-box">
+                <span class="black-label" style="cursor: pointer;">{{ 'MY_PROJECTS' | translate }}</span>
+                <span class="no-label" (click)="myProjects = false;" style="cursor: pointer;">{{ 'PROJECT_INVITATIONS' | translate }}</span>
+            </div>
+            <div class="flex-row" style="margin-top: 22px; gap: 24px;">
+                <div class="flex-column" style="flex: 1; margin-bottom: 10px;">
+                    <div *ngIf="projects$ | async as projects; else loading" class="projects">
+                        <div *ngFor="let p of projects" class="project" style="cursor: pointer; padding: 24px;" (click)="getRsvp(p); proj = p; updateProjectFiles(p);">
+                            <span width="100%"><b>{{ p.title }}</b></span>
+                            <div class="flex-row" style="align-items: center; margin-top: 16px; margin-bottom: 24px;">
+                                <img src="assets/owner.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PROJECT_OWNER' | translate }}:&nbsp;</span>
+                                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                                    {{ p.brand_name }}
+                                </span> 
+
+                                <img src="assets/clock.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PUBLISHED' | translate }}:&nbsp;</span>
+                                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                                    {{ formatDate(p.published_at) }}
+                                </span> 
+
+                                <img src="assets/dollar.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'BUDGET' | translate }}:&nbsp;</span>
+                                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333);">
+                                    {{ currency(p.budget) }}
+                                </span>
+                            </div>
+                            <p style="width: 100%; color: var(--Color---Grey-2, #4f4f4f);">{{ p.description }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="projects-filter-box flex-column" style="width: 283px; height: 99px;">
+                    <span class="small-bold" style="color: var(--Color---Grey-1, #333); opacity: 0.8;">{{ 'FILTER_BY' | translate }}:</span>
+                    <mat-form-field style="height: 55px; width: 233px;">
+                        <mat-select [(ngModel)]="projectState" (selectionChange)="getProjects();" disableOptionCentering class="select-input">
+                            <mat-option value="">{{ 'ALL_PROJECTS' | translate }}</mat-option>
+                            <mat-option value="A">{{ 'ACTIVE_PROJECTS' | translate }}</mat-option>
+                            <mat-option value="S">{{ 'SUSPENDED_PROJECTS' | translate }}</mat-option>
+                            <mat-option value="T">{{ 'COMPLETED_PROJECTS' | translate }}</mat-option>
+                            <mat-option value="C">{{ 'CANCELLED_PROJECTS' | translate }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <ng-template #myInvitations>
+        <div>
+            <div class="label-box">
+                <span class="no-label" (click)="myProjects = true;" style="cursor: pointer;">{{ 'MY_PROJECTS' | translate }}</span>
+                <span class="black-label" style="cursor: pointer;">{{ 'PROJECT_INVITATIONS' | translate }}</span>
+            </div>
+
+            <div class="flex-row" style="margin-top: 22px; gap: 24px;">
+                <div class="flex-column" style="flex: 1; margin-bottom: 10px;">
+                    <div *ngIf="invitations$ | async as invitations; else loading" class="projects">
+                        <div *ngFor="let p of invitations" class="project" style="cursor: pointer; padding: 24px;" (click)="getRsvp(p); proj = p;">
+                            <span width="100%"><b>{{ p.title }}</b></span>
+                            <div class="flex-row" style="align-items: center; margin-top: 16px; margin-bottom: 24px;">
+                                <img src="assets/clock.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PUBLISHED' | translate }}:&nbsp;</span>
+                                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                                    {{ formatDate(p.published_at) }}
+                                </span> 
+
+                                <img src="assets/dollar.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'BUDGET' | translate }}:&nbsp;</span>
+                                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333);">
+                                    {{ currency(p.budget) }}
+                                </span>
+                            </div>
+                            <p style="width: 100%; color: var(--Color---Grey-2, #4f4f4f);">{{ p.description }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="projects-filter-box flex-column" style="width: 283px; height: 99px;">
+                    <span class="small-bold" style="color: var(--Color---Grey-1, #333); opacity: 0.8;">{{ 'FILTER_BY' | translate }}:</span>
+                    <mat-form-field style="height: 55px; width: 233px;">
+                        <mat-select [(ngModel)]="invitationState" (selectionChange)="getInvitations();" disableOptionCentering class="select-input">
+                            <mat-option value="true">{{ 'ACCEPTED_INVITATIONS' | translate }}</mat-option>
+                            <mat-option value="false">{{ 'DECLINED_INVITATIONS' | translate }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>           
+            </div>
+        </div>
+        </ng-template>
+    </div>
+    <ng-template #myRsvp>
+        <div class="flex-column" style="flex: 1">
+            <div (click)="proj = null; rsvp$ = null; projectFiles$ = null;" style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 40px;">
+                <img src="assets/back.svg" style="width: 24px; height: 24px;">
+                <div>{{ 'BACK' | translate }}</div>
+            </div>
+ 
+            <div class="flex-row" style="gap: 24px;">
+                <div class="projects" style="flex: 1;">
+                    <div class="project" style="padding: 24px 24px 0px 24px;">
+                        <span width="100%"><b>{{ proj.title }}</b></span>
+                        <div class="flex-row" style="align-items: center; margin-top: 16px; margin-bottom: 24px;">
+                            <img src="assets/clock.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                            <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PUBLISHED' | translate }}:&nbsp;</span>
+                            <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                                {{ formatDate(proj.published_at) }}
+                            </span>
+                            
+                            <img src="assets/owner.svg" style="width: 24px; height: 24px; margin-right: 8px;">
+                            <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PROJECT_OWNER' | translate }}:&nbsp;</span>
+
+                            <span (click)="openReadUserDialog(proj.brand_id)"
+                                class="small-bold"
+                                style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 10px; cursor: pointer;">
+                                <u>{{ proj.brand_name }}</u>
+                            </span>
+                        </div>
+                        <div class="categories">
+                            <div *ngFor="let s of proj.categories">
+                                <div class="category-box">{{ categories[s] }}</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: center; align-items: center;">                 
+                            <div style="width: 100%; margin: 22px 0 30px 0;">
+                                <mat-divider></mat-divider>
+                            </div>
+                        </div>
+                    
+                        <span style="font-size: 20px;">{{ 'DESCRIPTION' | translate }}</span>
+                        <p style="width: 100%; color: var(--Color---Grey-2, #4f4f4f);">{{ proj.description }}</p>
+
+                        <ng-container *ngIf="rsvp$ | async as rsvp; else loading;">
+                        <span style="font-size: 20px;">{{ 'BID' | translate }}</span>
+                        <p style="width: 100%; color: var(--Color---Grey-2, #4f4f4f);">{{ currency(rsvp.bid) }}</p>               
+                        <span style="font-size: 20px;">{{ 'PROPOSAL' | translate }}</span>
+                        <p style="width: 100%; color: var(--Color---Grey-2, #4f4f4f);">{{ rsvp.proposal }}</p>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="profile-box">
+                    <span class="h3-font">{{ currency(proj.budget) }}</span>
+                    <span style="color: var(--Color---Grey-3, #828282); margin: 16px;">{{ 'BUDGET' | translate }}</span>
+
+                    <div style="display: flex; justify-content: center; align-items: center;">                 
+                        <div style="width: 265px;">
+                            <mat-divider></mat-divider>
+                        </div>
+                    </div>
+    
+                    <div class="flex-column" style="width: 100%; margin-bottom: 40px;">
+                        <button *ngIf="proj.state != 'C'" mat-button (click)="goChat(proj);" class="teal-button" style="width: 266px; height: 41px; margin-top: 24px;">{{ 'CONVERSATIONS' | translate }}</button>
+
+                        <div style="margin: 30px 0 10px; 0">{{ 'ASSET' | translate }}:</div>
+                        <div *ngIf="projectFiles$ | async as projectFiles"
+                            class="flex-column" style="gap: 10px; margin-bottom: 32px;">
+                            <span>{{ projectFiles.length }}&nbsp;{{ 'FILES' | translate }}</span>
+                            <div *ngFor="let f of projectFiles"
+                                class="flex-row" style="align-items: center; cursor: pointer;"
+                                (click)="downloadFile(f.file_id, f.name)">
+                                <span>&#x2022;</span>
+                                <img src="assets/upload-file.svg" style="width: 40px;">
+                                <div class="flex-column">
+                                    <span class="link">{{ f.name }}</span>
+                                    <span>{{ 'SIZE' | translate }}:&nbsp;{{ f.size }}&nbsp;{{ 'BYTES' | translate }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>{{ 'PROJECT_STATUS' | translate }}:</div>
+                        <p style="margin-bottom: 32px;">
+                            <b *ngIf="proj.state == 'P'">{{ 'PENDING' | translate }}</b>
+                            <b *ngIf="proj.state == 'A'">{{ 'ACTIVE' | translate }}</b>
+                            <b *ngIf="proj.state == 'S'">{{ 'SUSPENDED' | translate }}</b>
+                            <b *ngIf="proj.state == 'C'">{{ 'CANCELLED' | translate }}</b>
+                            <b *ngIf="proj.state == 'T'">{{ 'COMPLETED' | translate }}</b>                            
+                        </p>
+                        <div style="margin-bottom: 16px;">{{ 'PLATFORMS' | translate }}:</div>
+                        <div class="flex-column" style="gap: 10px;">
+                            <div *ngFor="let plat of proj.platforms" style="max-width: 200px; solid #D8DBDE;">
+                                <img src="assets/{{ plat }}.png" style="display: block; max-height: 50px; margin-left: auto; margin-right: auto;"> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</div>  
+
+<ng-template #loading>
+    <div class="projects" style="align-items: center; justify-content: center; width: 640.66px;">
+        <img src="assets/loading.svg" style="width: 100px; height: 100px;">
+    </div>
+</ng-template>

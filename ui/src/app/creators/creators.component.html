@@ -1,0 +1,101 @@
+<div class="flex-column" style="margin-top: 26px;">    
+    <span class="find-creators-title">{{ 'FIND_CREATORS' | translate }}</span>
+    
+    <div class="flex-row" style="margin-top: 42px; gap: 24px;">
+        <div class="flex-column" style="flex: 1">
+            <mat-form-field style="position: relative; width: 100%;">
+                <label class="placeholder placeholder-font" [ngStyle]="{'display': searchStr !== ''? 'none' : ''}">
+                    {{ '_SEARCH_CREATORS' | translate }}
+                </label>
+                <input matInput type="text" [(ngModel)]="searchStr" class="search-box" style="width: calc(100% - 24px); padding-left: 24px;">
+                <button mat-button (click)="updateCreators()"
+                    class="search-button" style="position: absolute; top: 6px; right: -2px; width: 65px; height: 53px;">
+                    <img src="assets/right-arrow-inv.svg" style="width: 24px; height: 24px; margin-right: 3px;"> 
+                </button>
+            </mat-form-field>
+            <div *ngIf="creators$ | async as creators" class="creators-box tiles" style="padding: 24px;">
+                <div *ngFor="let c of creators" class="creator-box flex-column" style="align-items: center;">
+                    
+                    <div class="circle-container" style="width: 100px; height: 100px;">
+                        <img *ngIf="c?.profile_picture; else no_pix" src="data:image/jpeg;base64,{{ c?.profile_picture}}" alt="Profile Picture" class="circle-image">
+                    </div>
+
+                    <ng-template #no_pix>
+                    <img src="assets/upload-profile.svg" style="width: 104px;">
+                    </ng-template>
+                    
+                    <div class="flex-row center" style="margin-top: 16px;">                 
+                        <label class="normal-bold">{{ c.name }}</label>
+                    </div>
+                    
+                    <!--
+                    <div *ngIf="c.city || c.country" class="flex-row" style="align-items: center; margin: 5px;">
+                        <img src="assets/grey-pin.svg" style="width: 19px; height: 19px;">
+                        {{ c.city }}<span *ngIf="c.city && c.country">,&nbsp;</span>{{ c.country }}
+                    </div>
+                    -->
+                    
+                    <div class="flex-row" style="align-items: center; margin: 5px;">
+                        <!-- show 0 to 5 stars -->
+                        <img *ngIf="c.rating >= 1" src="assets/star-full.svg" width="20px;">
+                        <img *ngIf="c.rating > 0 && c.rating < 1" src="assets/star-half.svg" width="20px;">
+                        <img *ngIf="c.rating <= 0" src="assets/star-empty.svg" width="20px;">
+                        <img *ngIf="c.rating >= 2" src="assets/star-full.svg" width="20px;">
+                        <img *ngIf="c.rating > 1 && c.rating < 2" src="assets/star-half.svg" width="20px;">
+                        <img *ngIf="c.rating <= 1" src="assets/star-empty.svg" width="20px;">
+                        <img *ngIf="c.rating >= 3" src="assets/star-full.svg" width="20px;">
+                        <img *ngIf="c.rating > 2 && c.rating < 3" src="assets/star-half.svg" width="20px;">
+                        <img *ngIf="c.rating <= 2" src="assets/star-empty.svg" width="20px;">
+                        <img *ngIf="c.rating >= 4" src="assets/star-full.svg" width="20px;">
+                        <img *ngIf="c.rating > 3 && c.rating < 4" src="assets/star-half.svg" width="20px;">
+                        <img *ngIf="c.rating <= 3" src="assets/star-empty.svg" width="20px;">
+                        <img *ngIf="c.rating >= 5" src="assets/star-full.svg" width="20px;">
+                        <img *ngIf="c.rating > 4 && c.rating < 5" src="assets/star-half.svg" width="20px;">
+                        <img *ngIf="c.rating <= 4" src="assets/star-empty.svg" width="20px;">
+                        <label class="normal-bold" style="margin-left: 7px;">{{ c.rating | number:'1.1-1' }}</label>
+                        <span class="small" style="margin-left: 8px; color: var(--Color---Grey-2, #4F4F4F);">({{ c.reviews }})</span>
+                    </div>
+                    
+                    <ng-container *ngIf="c.bid_min || c.bid_max">
+                    <span class="medium-bold" style="margin-top: 23px; color: #333333;">{{ currency(c.bid_min) }}&nbsp;-&nbsp;{{ currency(c.bid_max) }}</span>
+                    <span class="small" style="color: var(--Color---Grey-2, #4F4F4F);">{{ 'RATE' | translate }}</span>
+                    </ng-container>
+
+                    <ng-container *ngIf="c.followers">                    
+                    <span class="medium-bold" style="margin-top: 16px; color: #333333;">{{ c.followers | numberFormatter }}</span>             
+                    <span class="small" style="color: var(--Color---Grey-2, #4F4F4F);">{{ 'FOLLOWERS' | translate }}</span>
+                    </ng-container>
+                    <div style="display: flex; align-items: center; gap: 30px; margin-top: 10px;">
+                        <button mat-button (click)="openReadUserDialog(c)"
+                            class="white-button" style="width: 110px; height: 35px;">
+                            {{ "VIEW_PROFILE" | translate }}
+                        </button>
+                        <div (click)="goChatCreator(c)" style="display: flex;">
+                            <img src="assets/message.svg" style="width: 24px; height: 24px; cursor: pointer;">
+                        </div> 
+                    </div>
+                </div>
+            </div>           
+        </div>
+        
+        <div class="creators-filter-box flex-column" style="margin-top: 21px; width: 372px; height: 162px;">
+            <span class="small-bold">{{ 'FILTER_BY' | translate }}:</span>
+            <mat-form-field style="height: 55px; width: 322px; margin: 0px;">
+                <mat-select [(ngModel)]="cat" name="categories" disableOptionCentering class="select-input">
+                    <mat-option value="">{{ 'CATEGORY' | translate }}:&nbsp;<b>{{ 'ALL' | translate }}</b></mat-option>
+                    <ng-container *ngIf="categories$ | async as categories">
+                    <mat-option *ngFor="let c of categories" [value]="c.key">{{ c.value }}</mat-option>
+                    </ng-container>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field style="height: 55px; width: 322px; margin-top: 10px;">
+                <mat-select [(ngModel)]="plat" name="platforms" disableOptionCentering class="select-input">
+                    <mat-option value="">{{ 'PLATFORM' | translate }}:&nbsp;<b>{{ 'ALL' | translate }}</b></mat-option>
+                    <ng-container *ngIf="platforms$ | async as platforms">
+                    <mat-option *ngFor="let p of platforms" [value]="p.key">{{ p.value }}</mat-option>
+                    </ng-container>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+::ng-deep .mat-select-panel {
+    max-height: 500px !important;
+}
+
+.summary-box {
+  height: 170px;
+  opacity: 0.9;
+  border-radius: 16px;
+  border: solid 0.3px #828282;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.summary-caption {
+  flex-grow: 0;
+  opacity: 0.8;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.54;
+  letter-spacing: normal;
+  text-align: left;
+  color: #333;
+}
+
+.paypal-button {
+    border-radius: 198px;
+    display: flex;
+    height: 41px;
+    padding: 16px 80px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}

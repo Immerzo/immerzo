@@ -1,0 +1,127 @@
+::ng-deep .mat-action-row {
+    display: flex;
+    justify-content: center;
+}
+
+::ng-deep .mat-toolbar {
+    height: 75px;
+    background-color: var(--color-grey-6);
+}
+
+::ng-deep .mat-menu-panel {
+    width: 285px;
+    padding: 0 8px;
+}
+
+::ng-deep .mat-menu-item {
+    height: 40px !important;
+}
+
+.navbarlink {
+    color: #fff;
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+}
+
+.navbarlink:hover {
+    filter: brightness(0.75);
+}
+
+.w-nav-link {
+    vertical-align: top;
+    color: #222;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+}
+
+.dropdown-font {
+    color: var(--Color---Grey-1, #333);
+    
+    /* Text - Normal */
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22.4px; /* 140% */
+}
+
+footer {
+    position: absolute;
+    bottom: 8px;
+    right: 20px;
+    width: 200px;
+}
+
+.login-box {
+    display: flex;
+    justify-content: center; /* Horizontally center the children */
+    align-items: center; /* Vertically center the children (optional) */
+    flex-direction: column; /* Stack children vertically (optional) */
+    border-radius: 10px;
+    background: var(--Neutral-Col-3, #FFF);
+    width: 613px;
+    flex-shrink: 0;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+  
+.menu-entry {
+    color: var(--color-grey-2);
+    display: flex;
+    width: 208px;
+    height: 32px;
+    align-items: center;
+}
+
+.menu-entry-selected {
+    border-radius: 100px;
+    background-color: var(--color-other-1);
+    color: var(--color-white1);
+    display: flex;
+    width: 208px;
+    height: 32px;
+    align-items: center;
+}
+
+.menu-img {
+	width: 24px;
+    height: 24px;
+}
+
+p.copyright {
+    position: absolute;
+    font-size: 0.7em;
+	bottom: 0px;
+	right: 0px;
+}
+
+.side-nav {
+    background-color: #FFF;
+    width: 240px;
+    min-width: 240px;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+}
+
+.top-bar {
+    height: 80px;
+    background: #7645A8;
+}
+
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+    background-color: #5956FD !important;
+}
+
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+    background-color: rgba(0, 0, 0, .38) !important;
+}

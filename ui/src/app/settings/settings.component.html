@@ -1,0 +1,18 @@
+<div style="overflow: hidden;">
+  <table mat-table [dataSource]="dataSource" style="margin: 20px;">
+    <!-- Key Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef class="name-col">{{ 'NAME' | translate }}</th>
+      <td mat-cell *matCellDef="let element" class="name-col">{{ element.name }}</td>
+    </ng-container>
+
+    <!-- Value Column -->
+    <ng-container matColumnDef="value">
+      <th mat-header-cell *matHeaderCellDef class="value-col">{{ 'VALUE' | translate }}</th>
+      <td mat-cell *matCellDef="let element" class="value-col">{{ element.value }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

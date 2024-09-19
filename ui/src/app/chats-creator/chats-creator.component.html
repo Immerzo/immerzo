@@ -1,0 +1,365 @@
+<div style="margin-top: 26px;">
+    <div *ngIf="proj == null && chatBrand == null">
+        <div *ngIf="myProjects; else myInvitations">
+            <div class="label-box">
+                <span class="black-label" style="cursor: pointer;">{{ 'MY_PROJECTS' | translate }}</span>
+                <span class="no-label" (click)="myProjects = false;" style="cursor: pointer;">{{ 'PROJECT_INVITATIONS' | translate }}</span>
+            </div>
+            <div class="flex-row" style="margin-top: 22px; gap: 24px;">
+                <div class="flex-column" style="flex: 1; margin-bottom: 10px;">
+                    <div *ngIf="projects$ | async as projects; else loading" class="projects">
+                        <ng-container *ngFor="let p of projects">
+                        <div *ngIf="p.state != 'C'" class="project" style="cursor: pointer; padding: 24px;"
+                            (click)="proj = p; updateBrand(); triggerScroll = true;">    
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <span style="order: 1;"><b>{{ p.title }}</b></span>
+                                <div *ngIf="compareTimestamps(getUser().updated_at, p.latest_brand_at)"
+                                    style="display: flex; order: 2; margin-right: 33px;">
+                                    <img src="assets/envelop.svg" width="16">
+                                </div>
+                            </div>
+                        
+                            <div class="flex-row" style="align-items: center; margin-top: 16px; margin-bottom: 24px;">
+                                <img src="assets/owner.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PROJECT_OWNER' | translate }}:&nbsp;</span>
+                                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                                    {{ p.brand_name }}
+                                </span> 
+
+                                <img src="assets/clock.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PUBLISHED' | translate }}:&nbsp;</span>
+                                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                                    {{ formatDate(p.published_at) }}
+                                </span> 
+
+                                <img src="assets/dollar.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                                <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'BUDGET' | translate }}:&nbsp;</span>
+                                <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333);">
+                                    {{ currency(p.budget) }}
+                                </span>
+                            </div>
+                            <p width="100%">{{ p.description }}</p>
+                        </div>
+                        </ng-container>
+                    </div>
+
+                    <div *ngIf="chatBrands$ | async as chatBrands; else loading" class="projects" style="margin-top: 24px;">
+                        <ng-container *ngFor="let cb of chatBrands">
+                        <div class="project" style="cursor: pointer; padding: 24px 30px;"
+                            (click)="chatBrand = cb; counter = 0; updateChat(cb.id); triggerScroll = true;">
+    
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div class="flex-row" style="align-items: center; gap: 20px; width: 100%;">
+                                    <div class="circle-container" style="width: 45px; height: 45px;">
+                                        <img *ngIf="cb?.profile_picture; else no_pix" src="data:image/jpeg;base64,{{ cb?.profile_picture}}" alt="Profile Picture" class="circle-image">
+                                    </div>
+                
+                                    <ng-template #no_pix>
+                                    <img src="assets/upload-profile.svg" style="width: 45px;">
+                                    </ng-template>
+                                    
+                                    <div class="flex-column" style="width: 100%;">
+                                        <div class="flex-row" style="align-items: center; gap: 10px;">                 
+                                            <label class="normal-bold">{{ cb.name }}</label>
+                                            <ng-container *ngIf="compareTimestamps(getUser().updated_at, cb.latest_at)">
+                                                <img src="assets/envelop.svg" width="16">
+                                            </ng-container>
+                                        </div>
+    
+                                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                                            <div class="flex-row" style="align-items: center; order: 1;">                  
+                                                <span class="small" style="color: var(--Color---Grey-1, #333333);">{{ cb.url }}</span>   
+                                            </div>
+
+                                            <span *ngIf="cb.latest_at" class="medium" style="order: 2; color: var(--Color---Grey-1, #333333);">{{ formatTimestamp(cb.latest_at) }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </ng-container>
+                    </div>            
+                </div>
+
+                <div class="flex-column" style="gap: 10px;">
+                    <div class="projects-filter-box flex-column" style="width: 283px; height: 99px;">
+                        <span class="small-bold" style="color: var(--Color---Grey-1, #333); opacity: 0.8;">{{ 'FILTER_BY' | translate }}:</span>
+                        <mat-form-field style="height: 55px; width: 233px;">
+                            <mat-select [(ngModel)]="projectState" (selectionChange)="getProjects();" disableOptionCentering class="select-input">
+                                <mat-option value="">{{ 'ALL_PROJECTS' | translate }}</mat-option>
+                                <mat-option value="A">{{ 'ACTIVE_PROJECTS' | translate }}</mat-option>
+                                <mat-option value="S">{{ 'SUSPENDED_PROJECTS' | translate }}</mat-option>
+                                <mat-option value="T">{{ 'COMPLETED_PROJECTS' | translate }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <ng-template #myInvitations>
+            <div>
+                <div class="label-box">
+                    <span class="no-label" (click)="myProjects = true;" style="cursor: pointer;">{{ 'MY_PROJECTS' | translate }}</span>
+                    <span class="black-label" style="cursor: pointer;">{{ 'PROJECT_INVITATIONS' | translate }}</span>
+                </div>
+
+                <div class="flex-row" style="margin-top: 22px; gap: 24px;">
+                    <div class="flex-column" style="flex: 1">
+                        <div *ngIf="invitations$ | async as invitations; else loading" class="projects">
+                            <div *ngFor="let p of invitations" class="project" style="cursor: pointer; padding: 24px;"
+                                (click)="proj = p; updateBrand();">
+                                <span width="100%"><b>{{ p.title }}</b></span>
+                                <div class="flex-row" style="align-items: center; margin-top: 16px; margin-bottom: 24px;">
+                                    <img src="assets/clock.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                                    <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PUBLISHED' | translate }}:&nbsp;</span>
+                                    <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                                        {{ formatDate(p.published_at) }}
+                                    </span> 
+    
+                                    <img src="assets/dollar.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                                    <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'BUDGET' | translate }}:&nbsp;</span>
+                                    <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333);">
+                                        {{ currency(p.budget) }}
+                                    </span>
+                                </div>
+                                <p width="100%">{{ p.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="projects-filter-box flex-column" style="width: 283px; height: 99px;">
+                        <span class="small-bold" style="color: var(--Color---Grey-1, #333); opacity: 0.8;">{{ 'FILTER_BY' | translate }}:</span>
+                        <mat-form-field style="height: 55px; width: 233px;">
+                            <mat-select [(ngModel)]="invitationState" (selectionChange)="getInvitations();" disableOptionCentering class="select-input">
+                                <mat-option value="true">{{ 'ACCEPTED_INVITATIONS' | translate }}</mat-option>
+                                <mat-option value="false">{{ 'DECLINED_INVITATIONS' | translate }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+
+    <div *ngIf="proj != null">
+        <div class="flex-column">
+            <div (click)="proj = null; brand$ = null; chats$ = null; message = ''; clearAttachment();"
+                style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 36px;">
+                <img src="assets/back.svg" style="width: 24px; height: 24px;">
+                <div>{{ 'BACK' | translate }}</div>
+            </div>
+     
+            <div class="flex-column" style="width: 100%;">
+                <div class="project" style="padding: 24px 34px 16px 34px;">
+                    <span width="100%"><b>{{ proj.title }}</b></span>
+                    <div class="flex-row" style="align-items: center; margin-top: 16px; margin-bottom: 24px;">
+                        <img src="assets/owner.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                        <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PROJECT_OWNER' | translate }}:&nbsp;</span>
+                        <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                            {{ proj.brand_name }}
+                        </span> 
+    
+                        <img src="assets/clock.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                        <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PUBLISHED' | translate }}:&nbsp;</span>
+                        <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333); margin-right: 32px;">
+                            {{ formatDate(proj.published_at) }}
+                        </span> 
+    
+                        <img src="assets/status.svg" style="width: 24px; height: 24px; margin-right: 8px;"> 
+                        <span class="small" style="color: var(--Color---Grey-1, #333);">{{ 'PROJECT_STATUS' | translate }}:&nbsp;</span>
+                        <span class="small-bold" style="opacity: 0.8; color: var(--Color---Grey-1, #333);">
+                            <div *ngIf="proj.state == 'P'">{{ 'PENDING' | translate }}</div>
+                            <div *ngIf="proj.state == 'A'">{{ 'ACTIVE' | translate }}</div>
+                            <div *ngIf="proj.state == 'S'">{{ 'SUSPENDED' | translate }}</div>
+                            <div *ngIf="proj.state == 'C'">{{ 'CANCELLED' | translate }}</div>
+                            <div *ngIf="proj.state == 'T'">{{ 'COMPLETED' | translate }}</div>
+                        </span>
+                    </div>
+                    <div class="categories">
+                        <div *ngFor="let s of proj.categories">
+                            <div class="category-box">{{ categories[s] }}</div>
+                        </div>
+                    </div>
+    
+                    <div style="display: flex; justify-content: center; align-items: center;">                 
+                        <div style="width: 100%; margin: 22px 0 30px 0;">
+                            <mat-divider></mat-divider>
+                        </div>
+                    </div>
+                            
+                    <span style="font-size: 20px;">{{ 'DESCRIPTION' | translate }}</span>
+                    <p width="100%">{{ proj.description }}</p>
+    
+                    <ng-container *ngIf="brand$ | async as brand">
+                    <div class="flex-row" style="align-items: center; margin-top: 20px; width: 100%;">
+                        <div class="circle-container" style="width: 55px; height: 55px;">
+                            <img *ngIf="brand?.profile_picture; else no_pix" src="data:image/jpeg;base64,{{ brand?.profile_picture}}" alt="Profile Picture" class="circle-image">
+                        </div>
+                        <div class="name-label" style="text-align: left;">
+                            {{ brand.name }}
+                        </div>
+                        <div style="flex: 1;"></div>
+                        <div class="name-label" style="text-align: right;">
+                            {{ getUser().name }}
+                        </div>
+                        <div class="circle-container" style="width: 55px; height: 55px;">
+                            <img *ngIf="getUser()?.profile_picture; else no_pix" src="data:image/jpeg;base64,{{ getUser()?.profile_picture}}" alt="Profile Picture" class="circle-image">
+                        </div>                                                                 
+                    </div>
+                    </ng-container>
+    
+                    <div *ngIf="chats$ | async as chats; else loading" #scrollableDiv
+                        style="height: calc(100vh - 787px); overflow-y: scroll; padding: 0 58px 0 75px;">                    
+                        <div *ngFor="let c of chats" class="conversations">
+                            <div *ngIf="c.sender == 'B'" class="convo" style="align-self: flex-start;">
+                                <div class="timestamp" style="text-align: left;">{{ formatTimestamp(c.created_at) }}</div>
+                                <div class="bubble-left">
+                                    {{ c.msg }}
+                                    <ng-container *ngIf="c.file_id">
+                                    <div style="width: 100%; margin: 10px 0 10px 0;"><mat-divider></mat-divider></div>
+                                    <div class="flex-row timestamp" style="align-items: center; justify-content: center; cursor: pointer;"
+                                        (click)="downloadFile(c.file_id, c.name)">
+                                        <img src="assets/upload-file.svg" style="width: 40px;">
+                                        <span class="link">{{ c.name }}</span>&nbsp;|&nbsp;{{ 'SIZE' | translate }}:&nbsp;{{ c.size }}&nbsp;{{ 'BYTES' | translate }}
+                                    </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                            <div *ngIf="c.sender == 'C'" class="convo" style="align-self: flex-end;">
+                                <div class="timestamp" style="text-align: right;">
+                                    {{ formatTimestamp(c.created_at) }}
+                                    <img src="assets/close.svg" style="width: 24px; cursor: pointer;" (click)="deleteChat(c.id);">
+                                </div>
+                                <div class="bubble-right">
+                                    {{ c.msg }}
+                                    <ng-container *ngIf="c.file_id">
+                                    <div style="width: 100%; margin: 10px 0 10px 0;"><mat-divider></mat-divider></div>
+                                    <div class="flex-row timestamp" style="align-items: center; justify-content: center; cursor: pointer;"
+                                        (click)="downloadFile(c.file_id, c.name)">
+                                        <img src="assets/upload-file.svg" style="width: 40px;">
+                                        <span class="link">{{ c.name }}</span>&nbsp;|&nbsp;{{ 'SIZE' | translate }}:&nbsp;{{ c.size }}&nbsp;{{ 'BYTES' | translate }}
+                                    </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <mat-form-field style="width: 100%;">
+                    <label class="placeholder-proposal placeholder-font" [ngStyle]="{'display': message !== ''? 'none' : ''}">
+                        {{ '_TYPE_MESSAGE' | translate }}
+                    </label>
+                    <textarea matInput type="text" [(ngModel)]='message' name="message" class="chat-box"></textarea>
+                </mat-form-field>
+                <div class="flex-row" style="align-items: center;">
+                    <button (click)="sendMsg(proj.brand_id)" class="teal-button" style="width: 190px; margin-right: 16px;">{{ 'SEND' | translate }}</button>
+                     <a *ngIf="file == null;" href="#" (click)="browse($event)" class="blue-font">{{ 'ATTACH_FILE' | translate }}</a>
+                     <input type="file" style="display: none" (change)="onFileSelected($event)" #attachment>
+                     <div *ngIf="file" class="flex-row timestamp" style="align-items: center;">
+                         <img src="assets/upload-file.svg" style="width: 40px;">
+                         {{ file.name }}&nbsp;|&nbsp;{{ 'SIZE' | translate }}:&nbsp;{{ file.size }}
+                         <img src="assets/close.svg" width="20px" (click)="clearAttachment()">
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="chatBrand != null">
+        <div class="flex-column">    
+            <div (click)="chatBrand = null; chats$ = null; message = ''; clearAttachment();"
+                style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 36px;">
+                <img src="assets/back.svg" style="width: 24px; height: 24px;">
+                <div>{{ 'BACK' | translate }}</div>
+            </div>
+
+            <div class="flex-column" style="width: 100%;">
+                <div class="project" style="padding: 24px 34px 16px 34px;">
+                        <div class="flex-row" style="align-items: center; margin-top: 20px; width: 100%;">
+    
+                        <div class="circle-container" style="width: 55px; height: 55px;">
+                            <img *ngIf="chatBrand?.profile_picture; else no_pix" src="data:image/jpeg;base64,{{ chatBrand?.profile_picture}}" alt="Profile Picture" class="circle-image">
+                        </div>
+                        <div class="name-label" style="text-align: left;">
+                            {{ chatBrand.name }}
+                        </div>
+                        
+                        <ng-container *ngTemplateOutlet="creatorUser"></ng-container>                                                                  
+                    </div>
+
+                    <div *ngIf="chats$ | async as chats; else loading" #scrollableDiv
+                        style="height: calc(100vh - 698px); overflow-y: scroll; padding: 0 58px 0 75px;">
+                        <div *ngFor="let c of chats" class="conversations">
+                            <div *ngIf="c.sender == 'B'" class="convo" style="align-self: flex-start;">
+                                <div class="timestamp" style="text-align: left;">{{ formatTimestamp(c.created_at) }}</div>
+                                <div class="bubble-left">
+                                    {{ c.msg }}
+                                    <ng-container *ngIf="c.file_id">
+                                    <div style="width: 100%; margin: 10px 0 10px 0;"><mat-divider></mat-divider></div>
+                                    <div class="flex-row timestamp" style="align-items: center; justify-content: center; cursor: pointer;"
+                                        (click)="downloadFile(c.file_id, c.name)">
+                                        <img src="assets/upload-file.svg" style="width: 40px;">
+                                        <span class="link">{{ c.name }}</span>&nbsp;|&nbsp;{{ 'SIZE' | translate }}:&nbsp;{{ c.size }}&nbsp;{{ 'BYTES' | translate }}
+                                    </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                            <div *ngIf="c.sender == 'C'" class="convo" style="align-self: flex-end;">
+                                <div class="timestamp" style="text-align: right;">{{ formatTimestamp(c.created_at) }}</div>
+                                <div class="bubble-right">
+                                    {{ c.msg }}
+                                    <ng-container *ngIf="c.file_id">
+                                    <div style="width: 100%; margin: 10px 0 10px 0;"><mat-divider></mat-divider></div>
+                                    <div class="flex-row timestamp" style="align-items: center; justify-content: center; cursor: pointer;"
+                                        (click)="downloadFile(c.file_id, c.name)">
+                                        <img src="assets/upload-file.svg" style="width: 40px;">
+                                        <span class="link">{{ c.name }}</span>&nbsp;|&nbsp;{{ 'SIZE' | translate }}:&nbsp;{{ c.size }}&nbsp;{{ 'BYTES' | translate }}
+                                    </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <mat-form-field style="width: 100%;">
+                    <label class="placeholder-proposal placeholder-font" [ngStyle]="{'display': message !== ''? 'none' : ''}">
+                        {{ '_TYPE_MESSAGE' | translate }}
+                    </label>
+                    <textarea matInput type="text" [(ngModel)]='message' name="message" class="chat-box"></textarea>
+                </mat-form-field>
+
+                <div class="flex-row" style="align-items: center;">
+                    <button (click)="sendMsg(chatBrand.id)" class="teal-button" style="width: 190px; margin-right: 16px;">{{ 'SEND' | translate }}</button>
+                     <a *ngIf="file == null;" href="#" (click)="browse($event)" class="blue-font">{{ 'ATTACH_FILE' | translate }}</a>
+                     <input type="file" style="display: none" (change)="onFileSelected($event)" #attachment>
+                     <div *ngIf="file" class="flex-row timestamp" style="align-items: center;">
+                         <img src="assets/upload-file.svg" style="width: 40px;">
+                         {{ file.name }}&nbsp;|&nbsp;{{ 'SIZE' | translate }}:&nbsp;{{ file.size }}
+                         <img src="assets/close.svg" width="20px" (click)="clearAttachment()">
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+
+<ng-template #creatorUser>
+<div style="flex: 1;"></div>
+<div class="name-label" style="text-align: right;">
+    {{ getUser().name }}
+</div>
+<div class="circle-container" style="width: 55px; height: 55px;">
+    <img *ngIf="getUser()?.profile_picture; else no_pix" src="data:image/jpeg;base64,{{ getUser()?.profile_picture}}" alt="Profile Picture" class="circle-image">
+</div>
+</ng-template>
+
+<ng-template #loading>
+    <div class="projects" style="align-items: center; justify-content: center; width: 100%;">
+        <img src="assets/loading.svg" style="width: 100px; height: 100px;">
+    </div>
+</ng-template>
+
+<ng-template #no_pix>
+<img src="assets/upload-profile.svg" style="width: 55px;">
+</ng-template>
